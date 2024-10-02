@@ -11,8 +11,8 @@ private:
     size_t rows_, cols_;
     T **data_;
 
-    void initMatrix(size_t rows, size_t cols);
-    void freeMemoryMatrix();
+    void initMatrix(void);
+    void freeMemoryMatrix(void);
 
 public:
     size_t getRows(void) const { return rows_; };
