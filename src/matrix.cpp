@@ -27,5 +27,8 @@ void Matrix<T>::freeMemoryMatrix() {
 
 template<typename T>
 void Matrix<T>::copyMatrix(const Matrix<T>& other) {
-    
+    initMatrix();
+
+    for (size_t i = 0; i < rows_; i++)
+        std::copy(other.data_[i], other.data_[i] + cols_, data[i]);
 }
