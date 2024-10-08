@@ -51,7 +51,7 @@ public:
 
 
     void sumMatrix(const Matrix& other);
-    voud subMatrix(const Matrix& other);
+    void subMatrix(const Matrix& other);
     void mulMatrix(const Matrix& other);
     void mulScalar(const T scalar);
     void transposeMatrix();
