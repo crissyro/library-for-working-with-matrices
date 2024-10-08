@@ -13,6 +13,7 @@ private:
 
     void initMatrix();
     void freeMemoryMatrix();
+    void copyMatrix(const Matrix<T>& other);
 
 public:
     size_t getRows() const { return rows_; };
