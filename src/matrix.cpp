@@ -69,3 +69,14 @@ Matrix<T>::Matrix(const size_t rows, const size_t cols, T** array): rows_(rows),
 template<typename T>
 Matrix<T>::~Matrix() { freeMemoryMatrix(); }
 
+template<typename T>
+void Matrix<T>::printMatrix() const {
+    for (size_t i = 0; i < rows; i++) {
+        for (size_t j = 0; j < cols; j++) {
+            if (j == cols - 1)
+                std::cout << data_[i][j] << std::endl;
+            else
+                std::cout << data_[i][j] << " ";
+        }
+    }
+}
