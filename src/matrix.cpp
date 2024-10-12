@@ -2,86 +2,28 @@
 
 template<typename T>
 void Matrix<T>::initMatrix() {
-    data_ = new T*[rows_];
-
-    if (!data_) throw std::bad_alloc();
-
-    for (size_t i = 0; i < rows_; i++) {
-        data_[i] = new T[cols_];
-
-        if (!data_[i]) throw std::bad_alloc();
-
-        std::fill(data_[i], data_[i] + cols_, 0.0);
+    data_ = std::make_unique<std::unique_ptr<T[]>[]>(rows_);
+    for (size_t i = 0; i < rows_; ++i) {
+        data_[i] = std::make_unique<T[]>(cols_);
+        std::fill(data_[i].get(), data_[i].get() + cols_, static_cast<T>(0)); 
     }
 }
 
 template<typename T>
-void Matrix<T>::freeMemoryMatrix() {
-    if (data_ != nullptr) {
-        for (size_t i = 0; i < rows_; i++) 
-            delete[] data_[i];
-        
-        delete[] data_;
-        data_ = nullptr;
-    }
-
+void Matrix<T>::freeMemoryMatrix() noexcept {
+    data_.reset();
     rows_ = 0;
     cols_ = 0;
 }
 
 template<typename T>
 void Matrix<T>::copyMatrix(const Matrix<T>& other) {
+    rows_ = other.rows_;
+    cols_ = other.cols_;
+
     initMatrix();
 
-    for (size_t i = 0; i < rows_; i++)
-        std::copy(other.data_[i], other.data_[i] + cols_, data_[i]);
-}
-
-template<typename T>
-Matrix<T>::Matrix(const size_t rows, const size_t cols): rows_(rows), cols_(cols), data_{nullptr} {
-    initMatrix();
-}
-
-template<typename T>
-Matrix<T>::Matrix(): rows_(MIN_SIZE_MATRIX), cols_(MIN_SIZE_MATRIX), data_{nullptr}{
-    initMatrix();
-}
-
-template<typename T>
-Matrix<T>::Matrix(const size_t size): Matrix(size, size) { }
-
-template<typename T>
-Matrix<T>::Matrix(const Matrix<T>& other): rows_(other.rows_), cols_(other.cols_), data_(nullptr) {
-    initMatrix();
-    copyMatrix(other);
-}
-
-template<typename T>
-Matrix<T>::Matrix(Matrix<T>&& other): rows_(other.rows_), cols_(other.cols_), data_(other.data_) {
-    other.freeMemoryMatrix();
-    // other.data_ = nullptr;
-    // other.rows_ = 0;
-    // other.cols_ = 0;
-}
-
-template<typename T>
-Matrix<T>::Matrix(const size_t rows, const size_t cols, T** array): rows_(rows), cols_(cols) { 
-    initMatrix();
-    for (size_t i = 0; i < rows_; ++i)
-        std::copy(array[i], array[i] + cols_, data_[i]);
-}
-
-template<typename T>
-Matrix<T>::~Matrix() { freeMemoryMatrix(); }
-
-template<typename T>
-void Matrix<T>::printMatrix() const {
-    for (size_t i = 0; i < rows_; i++) {
-        for (size_t j = 0; j < cols_; j++) {
-            if (j == cols - 1)
-                std::cout << data_[i][j] << std::endl;
-            else
-                std::cout << data_[i][j] << " ";
-        }
-    }
+    for (size_t i = 0; i < rows_; ++i) 
+        std::copy(other.data_[i].get(), other.data_[i].get() + cols_, data_[i].get());
+    
 }
