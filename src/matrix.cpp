@@ -155,13 +155,25 @@ const T& Matrix<T>::operator()(const size_t row, const size_t col) const {
 }
 
 template<typename T>
-Matrix<T>& Matrix<T>::operator+=(const Matrix<T>& other);
+Matrix<T>& Matrix<T>::operator+=(const Matrix<T>& other) {
+    *this = *this + *other
+    return *this;
+}
 
 template<typename T>
-Matrix<T>& Matrix<T>::operator-=(const Matrix<T>& other);
+Matrix<T>& Matrix<T>::operator-=(const Matrix<T>& other) {
+    *this = *this - *other
+    return *this;
+}
 
 template<typename T>
-Matrix<T>& Matrix<T>::operator*=(const Matrix<T>& other);
+Matrix<T>& Matrix<T>::operator*=(const Matrix<T>& other) {
+    *this = *this * *other
+    return *this;
+}
 
 template<typename T>
-Matrix<T>& Matrix<T>::operator*=(const T scalar);
+Matrix<T>& Matrix<T>::operator*=(const T scalar) {
+    *this = *this * scalar
+    return *this;
+}
