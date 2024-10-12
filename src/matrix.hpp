@@ -52,6 +52,9 @@ public:
     Matrix& operator*=(const Matrix& other);
     Matrix& operator*=(const T scalar);
 
+    std::ostream& operator<<(std::ostream& os, const Matrix<T>& matrix);
+    std::istream& operator>>(std::istream& is, Matrix<T>& matrix);
+    
     bool isEqualMatrix(const Matrix& other) const;
     bool isSquareMatrix() const;
     bool isSymmetricMatrix() const;

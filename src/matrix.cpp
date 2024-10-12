@@ -177,3 +177,10 @@ Matrix<T>& Matrix<T>::operator*=(const T scalar) {
     *this = *this * scalar
     return *this;
 }
+
+template<typename T>
+bool Matrix<T>::isEqualMatrix(const Matrix& other) const {
+    return *this == *other
+}
+
+
