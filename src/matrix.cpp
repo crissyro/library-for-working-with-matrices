@@ -66,6 +66,18 @@ Matrix<T>& Matrix<T>::operator=(const Matrix<T>& other) {
         freeMemoryMatrix();
         copyMatrix(other);
     }
-    
+
     return *this;
+}
+
+template<typename T>
+bool Matrix<T>::operator==(const Matrix<T>& other) const {
+    if (rows_ != other.rows_ || cols_ != other.cols_) return false;
+
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j < cols_; ++j) 
+            if (data_[i][j] != other.data_[i][j]) return false;
+    }
+    
+    return true;
 }
