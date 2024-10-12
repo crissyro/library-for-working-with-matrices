@@ -48,9 +48,7 @@ Matrix<T>::Matrix(): rows_(MIN_SIZE_MATRIX), cols_(MIN_SIZE_MATRIX), data_{nullp
 }
 
 template<typename T>
-Matrix<T>::Matrix(const size_t size) {
-    Matrix<T>::Matrix(size, size);
-}
+Matrix<T>::Matrix(const size_t size): Matrix(size, size) { }
 
 template<typename T>
 Matrix<T>::Matrix(const Matrix<T>& other): rows_(other.rows_), cols_(other.cols_), data_(nullptr) {
@@ -59,20 +57,27 @@ Matrix<T>::Matrix(const Matrix<T>& other): rows_(other.rows_), cols_(other.cols_
 }
 
 template<typename T>
-Matrix<T>::Matrix(Matrix&& other): rows_(other.rows_), cols_(other.cols_), data_(other.data_) {
+Matrix<T>::Matrix(Matrix<T>&& other): rows_(other.rows_), cols_(other.cols_), data_(other.data_) {
     other.freeMemoryMatrix();
+    // other.data_ = nullptr;
+    // other.rows_ = 0;
+    // other.cols_ = 0;
 }
 
 template<typename T>
-Matrix<T>::Matrix(const size_t rows, const size_t cols, T** array): rows_(rows), cols_(cols), data_(array) { }
+Matrix<T>::Matrix(const size_t rows, const size_t cols, T** array): rows_(rows), cols_(cols) { 
+    initMatrix();
+    for (size_t i = 0; i < rows_; ++i)
+        std::copy(array[i], array[i] + cols_, data_[i]);
+}
 
 template<typename T>
 Matrix<T>::~Matrix() { freeMemoryMatrix(); }
 
 template<typename T>
 void Matrix<T>::printMatrix() const {
-    for (size_t i = 0; i < rows; i++) {
-        for (size_t j = 0; j < cols; j++) {
+    for (size_t i = 0; i < rows_; i++) {
+        for (size_t j = 0; j < cols_; j++) {
             if (j == cols - 1)
                 std::cout << data_[i][j] << std::endl;
             else
