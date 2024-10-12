@@ -59,3 +59,13 @@ Matrix<T>::Matrix(Matrix<T>&& other) noexcept : rows_(other.rows_), cols_(other.
     other.rows_ = 0;
     other.cols_ = 0;
 }
+
+template<typename T>
+Matrix<T>& Matrix<T>::operator=(const Matrix<T>& other) {
+    if (this != &other) {
+        freeMemoryMatrix();
+        copyMatrix(other);
+    }
+    
+    return *this;
+}
