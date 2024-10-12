@@ -140,10 +140,19 @@ Matrix<T> Matrix<T>::operator*(const T scalar) const {
 
 template<typename T>
 T& Matrix<T>::operator()(const size_t row, const size_t col) {
-    
+    if (row >= rows_ || col >= cols_)
+        throw std::out_of_range("Matrix index out of range");
+
+    return data_[row][col];
 }
 
-const T& operator()(const size_t row, const size_t col) const;
+template<typename T>
+const T& Matrix<T>::operator()(const size_t row, const size_t col) const {
+    if (row >= rows_ || col >= cols_)
+        throw std::out_of_range("Matrix index out of range");
+
+    return data_[row][col];
+}
 
 template<typename T>
 Matrix<T>& Matrix<T>::operator+=(const Matrix<T>& other);
