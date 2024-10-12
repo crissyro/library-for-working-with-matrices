@@ -111,14 +111,37 @@ Matrix<T> Matrix<T>::operator-(const Matrix<T>& other) const {
 }
 
 template<typename T>
-Matrix<T> Matrix<T>::operator*(const Matrix<T>& other) const;
+Matrix<T> Matrix<T>::operator*(const Matrix<T>& other) const {
+    if (cols_!= other.rows_)
+        throw std::invalid_argument("Matrices have incompatible dimensions for multiplication");
+
+    Matrix result(rows_, other.cols_);
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j < other.cols_; ++j) {
+            result.data_[i][j] = static_cast<T>(0);
+            for (size_t k = 0; k < cols_; ++k)
+                result.data_[i][j] += data_[i][k] * other.data_[k][j];
+        }
+    }
+
+    return result;
+}
 
 template<typename T>
-Matrix<T> Matrix<T>::operator*(const T scalar) const;
+Matrix<T> Matrix<T>::operator*(const T scalar) const {
+    Matrix result(rows_, cols_);
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j < cols_; ++j) 
+            result.data_[i][j] = data_[i][j] * scalar;
+    }
 
+    return result;
+}
 
-T& operator()(const size_t row, const size_t col);
-
+template<typename T>
+T& Matrix<T>::operator()(const size_t row, const size_t col) {
+    
+}
 
 const T& operator()(const size_t row, const size_t col) const;
 
