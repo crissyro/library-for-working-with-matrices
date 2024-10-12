@@ -183,4 +183,24 @@ bool Matrix<T>::isEqualMatrix(const Matrix& other) const {
     return *this == *other
 }
 
+template<typename T>
+std::ostream& operator<<(std::ostream& os, const Matrix<T>& matrix) {
+    for (size_t i = 0; i < matrix.rows_; ++i) {
+        for (size_t j = 0; j < matrix.cols_; ++j) 
+            os << matrix.data_[i][j] << " ";
+        os << std::endl;
+    }
+
+    return os;
+}
+
+template<typename T>
+std::istream& operator>>(std::istream& is, Matrix<T>& matrix) {
+    for (size_t i = 0; i < matrix.rows_; ++i) {
+        for (size_t j = 0; j < matrix.cols_; ++j) 
+            is >> matrix.data_[i][j];
+    }
+
+    return is;
+}
 
