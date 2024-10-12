@@ -78,6 +78,58 @@ bool Matrix<T>::operator==(const Matrix<T>& other) const {
         for (size_t j = 0; j < cols_; ++j) 
             if (data_[i][j] != other.data_[i][j]) return false;
     }
-    
+
     return true;
 }
+
+template<typename T>
+Matrix<T> Matrix<T>::operator+(const Matrix<T>& other) const {
+    if (rows_!= other.rows_ || cols_!= other.cols_)
+        throw std::invalid_argument("Matrices have different dimensions");
+
+    Matrix result(rows_, cols_);
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j < cols_; ++j) 
+            result.data_[i][j] = data_[i][j] + other.data_[i][j];
+    }
+
+    return result;
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::operator-(const Matrix<T>& other) const {
+    if (rows_!= other.rows_ || cols_!= other.cols_)
+        throw std::invalid_argument("Matrices have different dimensions");
+
+    Matrix result(rows_, cols_);
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j < cols_; ++j) 
+            result.data_[i][j] = data_[i][j] - other.data_[i][j];
+    }
+
+    return result;
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::operator*(const Matrix<T>& other) const;
+
+template<typename T>
+Matrix<T> Matrix<T>::operator*(const T scalar) const;
+
+
+T& operator()(const size_t row, const size_t col);
+
+
+const T& operator()(const size_t row, const size_t col) const;
+
+template<typename T>
+Matrix<T>& Matrix<T>::operator+=(const Matrix<T>& other);
+
+template<typename T>
+Matrix<T>& Matrix<T>::operator-=(const Matrix<T>& other);
+
+template<typename T>
+Matrix<T>& Matrix<T>::operator*=(const Matrix<T>& other);
+
+template<typename T>
+Matrix<T>& Matrix<T>::operator*=(const T scalar);
