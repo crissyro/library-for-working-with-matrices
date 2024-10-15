@@ -395,7 +395,19 @@ void Matrix<T>::setNormalMatrix() {
     Matrix<T> transpose = this->transposeMatrix();
     Matrix<T> identity = Matrix<T>::makeIdentityMatrix(rows_);
 
-    if (*this * transpose!= transpose * this || *this * identity!= identity)
+    if (*this * transpose != transpose * this || *this * identity != identity)
         throw std::error_condition("Matrix is not normal");
+}
+
+template<typename T>
+void Matrix<T>::setOrthogonalMatrix() {
+    if (!isSquareMatrix())
+        throw std::error_condition("Matrix must be square");
+
+    Matrix<T> transpose = this->transposeMatrix();
+    Matrix<T> identity = Matrix<T>::makeIdentityMatrix(rows_);
+
+    if ((*this * transpose != identity && *this * transpose != -identity) || (*this * identity != identity && *this * identity != -identity))
+        throw std::error_condition("Matrix is not orthogonal");
 }
 

@@ -486,7 +486,7 @@ public:
      * 
      * @tparam T Тип элементов матрицы.
      */
-    void setOrthogonalMatrix() noexcept;
+    void setOrthogonalMatrix();
 
     /**
      * @brief Устанавливает текущую матрицу как диагональную матрицу.
