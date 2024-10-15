@@ -314,13 +314,25 @@ template<typename T>
 bool Matrix<T>::isNormalMatrix() const {
     if (!isSquareMatrix()) return false;
 
-    Matrix<T> transpose = this->transpose();
-    Matrix<T> identity = Matrix<T>::identity(rows_);
+    Matrix<T> transpose = this->transposeMatrix();
+    Matrix<T> identity = Matrix<T>::makeIdentityMatrix(rows_);
 
     return (*this * transpose == transpose * this) && (*this * identity == identity);
 }
 
 template<typename T>
-Matrix<T> Matrix<T>::makeIdentityMatrix(const size_t size) const {
+Matrix<T> Matrix<T>::makeIdentityMatrix(const size_t size = 2) const {
+    if (size < MIN_SIZE_MATRIX)
+        throw std::invalid_argument("Matrix size must be greater than or equal to " + std::to_string(MIN_SIZE_MATRIX));
 
+    Matrix<T> result(size, size);
+
+    for (size_t i = 0; i < size; ++i) {
+        for (size_t j = 0; j < size; ++j) {
+            result(i, j) = (i == j)? static_cast<T>(1) : static_cast<T>(0);
+        }
+    }
+
+    return result;
 }
+
