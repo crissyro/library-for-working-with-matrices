@@ -232,7 +232,12 @@ inline bool Matrix<T>::isIdentityMatrix() const noexcept {
     if (!isSquareMatrix()) return false;
 
     for (size_t i = 0; i < rows_; ++i) {
-        if (data_[i][i] != static_cast<T>(1)) return false;
+        for (size_t j = 0; j < cols_; ++j) 
+            if (i == j && data_[i][j] != static_cast<T>(1)) 
+                return false;
+
+            else if (i != j && data_[i][j] != static_cast<T>(0)) 
+                return false;
     }
 
     return true;
@@ -251,18 +256,30 @@ template <typename T>
 inline bool Matrix<T>::isSingular() const noexcept {
     if (!isSquareMatrix()) return false;
 
-    Matrix<T> adjugate = adjugateMatrix();
-    Matrix<T> identity(rows_, cols_);
-    identity.setIdentityMatrix();
+    T determinant = determinant();
 
-    return (*this * adjugate) == identity;
+    return determinant == static_cast<T>(0);
 }
 
 template <typename T>
 inline bool Matrix<T>::isDiagonalMatrix() const {
     for (size_t i = 0; i < rows_; ++i) {
         for (size_t j = 0; j < cols_; ++j) 
-            if (i!= j && data_[i][j] != static_cast<T>(0)) return false;
+            if (i != j && data_[i][j] != static_cast<T>(0)) 
+                return false;
+
+            else if (i == j && data_[i][j] == static_cast<T>(0)) 
+                return false;
+    }
+
+    return true;
+}
+
+template<typename T>
+inline bool Matrix<T>::isUpperTriangularMatrix() const {
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j < i; ++j) 
+            if (data_[i][j] != static_cast<T>(0)) return false;
     }
 
     return true;
