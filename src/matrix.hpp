@@ -23,9 +23,9 @@ private:
     size_t rows_, cols_;
     std::unique_ptr<std::unique_ptr<T[]>[]> data_; 
 
-    void initMatrix();
+    void initMatrix() noexcept;
     void freeMemoryMatrix() noexcept;
-    void copyMatrix(const Matrix<T>& other);
+    void copyMatrix(const Matrix<T>& other) noexcept;
 
 public:
     size_t getRows() const noexcept { return rows_; }
@@ -55,9 +55,9 @@ public:
     std::ostream& operator<<(std::ostream& os, const Matrix<T>& matrix);
     std::istream& operator>>(std::istream& is, Matrix<T>& matrix);
     
-    bool isEqualMatrix(const Matrix& other) const;
-    bool isSquareMatrix() const;
-    bool isSymmetricMatrix() const;
+    bool isEqualMatrix(const Matrix& other) const noexcept;
+    bool isSquareMatrix() const noexcept;
+    bool isSymmetricMatrix() const noexcept;
     bool isEMatrix() const;
     bool isIdentityMatrix() const;
     bool isZeroMatrix() const;

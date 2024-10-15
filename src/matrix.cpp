@@ -1,7 +1,7 @@
 #include "matrix.hpp"//-
 
 template<typename T>
-void Matrix<T>::initMatrix() {
+void Matrix<T>::initMatrix() noexcept {
     data_ = std::make_unique<std::unique_ptr<T[]>[]>(rows_);
     for (size_t i = 0; i < rows_; ++i) {
         data_[i] = std::make_unique<T[]>(cols_);
@@ -17,7 +17,7 @@ inline void Matrix<T>::freeMemoryMatrix() noexcept {
 }
 
 template<typename T>
-void Matrix<T>::copyMatrix(const Matrix<T>& other) {
+void Matrix<T>::copyMatrix(const Matrix<T>& other) noexcept {
     rows_ = other.rows_;
     cols_ = other.cols_;
 
@@ -200,6 +200,7 @@ std::istream& operator>>(std::istream& is, Matrix<T>& matrix) {
 }
 
 template<typename T>
-inline bool Matrix<T>::isEqualMatrix(const Matrix& other) const {
+inline bool Matrix<T>::isEqualMatrix(const Matrix& other) const noexcept {
     return *this == *other
 }
+
