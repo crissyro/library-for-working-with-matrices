@@ -500,3 +500,5 @@ inline void Matrix<T>::mulScalar(const T& scalar) { this *= scalar; }
 template<typename T>
 inline Matrix<T> Matrix<T>::sumMatrix(const Matrix<T>& mat1, const Matrix<T>& mat2) { return mat1 + mat2; }
 
+template<typename T>
+inline Matrix<T> Matrix<T>::subMatrix(const Matrix<T>& mat1, const Matrix<T>& mat2) { return mat1 - mat2; }
