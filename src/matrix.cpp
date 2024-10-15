@@ -210,7 +210,7 @@ inline bool Matrix<T>::isSquareMatrix() const noexcept {
 } 
 
 template<typename T>
-inline bool Matrix<T>::isSymmetricMatrix() const noexcept {
+inline bool Matrix<T>::isSymetricMatrix() const noexcept {
     if (!isSquareMatrix()) return false;
 
     for (size_t i = 0; i < rows_; ++i) {
@@ -227,6 +227,16 @@ inline bool Matrix<T>::isIdentityMatrix() const noexcept {
 
     for (size_t i = 0; i < rows_; ++i) {
         if (data_[i][i] != static_cast<T>(1)) return false;
+    }
+
+    return true;
+}
+
+template <typename T>
+inline bool Matrix<T>::isZeroMatrix() const noexcept {
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j < cols_; ++j) 
+            if (data_[i][j] != static_cast<T>(0)) return false;
     }
 
     return true;

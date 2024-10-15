@@ -57,11 +57,17 @@ public:
     
     bool isEqualMatrix(const Matrix& other) const noexcept;
     bool isSquareMatrix() const noexcept;
-    bool isSymmetricMatrix() const noexcept;
-    bool isDiagonalMatrix() const;
+    bool isSymetricMatrix() const noexcept;
     bool isIdentityMatrix() const;
     bool isZeroMatrix() const;
     bool isSingular() const;
+    bool isDiagonalMatrix() const;
+    bool isTriangularMatrix() const;
+    bool isUpperTriangularMatrix() const;
+    bool isLowerTriangularMatrix() const;
+    bool isOrthogonalMatrix() const;
+    bool isDiagonalizable() const;
+    bool isNormalMatrix() const;
 
     void makeMatrixFromArray(const T** array);
     void printMatrix() const;
