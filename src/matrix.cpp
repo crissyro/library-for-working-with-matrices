@@ -209,4 +209,14 @@ inline bool Matrix<T>::isSquareMatrix() const noexcept {
     return rows_ == columns_;
 } 
 
+template<typename T>
+inline bool Matrix<T>::isSymmetricMatrix() const noexcept {
+    if (!isSquareMatrix()) return false;
 
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j < i; ++j) 
+            if (data_[i][j] != data_[j][i]) return false;
+    }
+
+    return true;
+}
