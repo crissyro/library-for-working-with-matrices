@@ -490,3 +490,10 @@ inline void Matrix<T>::sumMatrix(const Matrix<T>& other) { *this += (*other); }
 
 template<typename T>
 inline void Matrix<T>::subMatrix(const Matrix<T>& other) { *this -= (*other); }
+
+template<typename T>
+inline void Matrix<T>::mulMatrix(const Matrix<T>& other) { *this *= (*other)}
+
+template<typename T>
+inline void Matrix<T>::mulScalar(const T& scalar) {*this *= scalar }
+

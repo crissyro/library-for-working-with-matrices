@@ -628,7 +628,7 @@ public:
      * @tparam T Тип элементов матрицы.
      * @param scalar Значение скаляра для умножения.
      */
-    void mulScalar(const T scalar);
+    void mulScalar(const T& scalar);
 
     /**
      * @brief Транспонирует текущую матрицу.
