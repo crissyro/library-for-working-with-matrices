@@ -411,3 +411,18 @@ void Matrix<T>::setOrthogonalMatrix() {
         throw std::error_condition("Matrix is not orthogonal");
 }
 
+template<typename T>
+void Matrix<T>::setDiagonalMatrix(const T* diagonalArray) {
+    if (!isSquareMatrix())
+        throw std::error_condition("Matrix must be square");
+
+    if (diagonalArray == nullptr || sizeof(diagonalArray) / sizeof(*diagonalArray) != rows_)
+        throw std::error_argument("Len array must be equal with matrix rows number")
+
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j < cols_; ++j) {
+            data_[i][j] = (i == j)? diagonalArray[i] : static_cast<T>(0);
+        }
+    }
+}
+
