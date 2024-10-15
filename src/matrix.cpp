@@ -276,6 +276,16 @@ inline bool Matrix<T>::isDiagonalMatrix() const {
 }
 
 template<typename T>
+inline bool Matrix<T>::isTriangularMatrix() const {
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = i + 1; j < cols_; ++j) 
+            if (data_[i][j] != static_cast<T>(0)) return false;
+    }
+
+    return true;
+}
+
+template<typename T>
 inline bool Matrix<T>::isUpperTriangularMatrix() const {
     for (size_t i = 0; i < rows_; ++i) {
         for (size_t j = 0; j < i; ++j) 
