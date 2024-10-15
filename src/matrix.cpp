@@ -486,14 +486,17 @@ void Matrix<T>::printMatrix() const {
 }
 
 template<typename T>
-inline void Matrix<T>::sumMatrix(const Matrix<T>& other) { *this += (*other); }
+inline void Matrix<T>::sumMatrix(const Matrix<T>& other) { this += other; }
 
 template<typename T>
-inline void Matrix<T>::subMatrix(const Matrix<T>& other) { *this -= (*other); }
+inline void Matrix<T>::subMatrix(const Matrix<T>& other) { this -= other; }
 
 template<typename T>
-inline void Matrix<T>::mulMatrix(const Matrix<T>& other) { *this *= (*other)}
+inline void Matrix<T>::mulMatrix(const Matrix<T>& other) { this *= other; }
 
 template<typename T>
-inline void Matrix<T>::mulScalar(const T& scalar) {*this *= scalar }
+inline void Matrix<T>::mulScalar(const T& scalar) { this *= scalar; }
+
+template<typename T>
+inline Matrix<T> Matrix<T>::sumMatrix(const Matrix<T>& mat1, const Matrix<T>& mat2) { return mat1 + mat2; }
 
