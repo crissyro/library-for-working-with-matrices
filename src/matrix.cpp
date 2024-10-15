@@ -474,12 +474,6 @@ void Matrix<T>::setTriangularMatrix(const T value, bool isUpper = true) {
 }
 
 template<typename T>
-Matrix<T> Matrix<T>::makeMatrixFromArray(const T** array) {
-    if (array == nullptr)
-        throw std::invalid_argument("Input array is nullptr");
-}
-
-template<typename T>
 void Matrix<T>::printMatrix() const {
     for (size_t i = 0; i < rows_; ++i) {
         for (size_t j = 0; j < cols_; ++j) 
