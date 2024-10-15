@@ -485,3 +485,8 @@ void Matrix<T>::printMatrix() const {
     std::cout << std::endl;
 }
 
+template<typename T>
+inline void Matrix<T>::sumMatrix(const Matrix<T>& other) { *this += (*other); }
+
+template<typename T>
+inline void Matrix<T>::subMatrix(const Matrix<T>& other) { *this -= (*other); }
