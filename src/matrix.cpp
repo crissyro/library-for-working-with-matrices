@@ -204,3 +204,9 @@ inline bool Matrix<T>::isEqualMatrix(const Matrix& other) const noexcept {
     return *this == *other
 }
 
+template<typename T>
+inline bool Matrix<T>::isSquareMatrix() const noexcept {
+    return rows_ == columns_;
+} 
+
+
