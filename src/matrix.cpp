@@ -61,7 +61,7 @@ inline Matrix<T>::Matrix(const Matrix<T>& other) noexcept {
 }
 
 template<typename T>
-Matrix<T>::Matrix(Matrix<T>&& other) noexcept : rows_(other.rows_), cols_(other.cols_), data_(std::move(other.data_)) {
+inline Matrix<T>::Matrix(Matrix<T>&& other) noexcept : rows_(other.rows_), cols_(other.cols_), data_(std::move(other.data_)) {
     other.rows_ = 0;
     other.cols_ = 0;
 }
@@ -216,7 +216,7 @@ inline bool Matrix<T>::isSquareMatrix() const noexcept {
 } 
 
 template<typename T>
-inline bool Matrix<T>::isSymetricMatrix() const noexcept {
+bool Matrix<T>::isSymetricMatrix() const noexcept {
     if (!isSquareMatrix()) return false;
 
     for (size_t i = 0; i < rows_; ++i) {
@@ -228,7 +228,7 @@ inline bool Matrix<T>::isSymetricMatrix() const noexcept {
 }
 
 template <typename T>
-inline bool Matrix<T>::isIdentityMatrix() const noexcept {
+bool Matrix<T>::isIdentityMatrix() const noexcept {
     if (!isSquareMatrix()) return false;
 
     for (size_t i = 0; i < rows_; ++i) {
@@ -244,7 +244,7 @@ inline bool Matrix<T>::isIdentityMatrix() const noexcept {
 }
 
 template <typename T>
-inline bool Matrix<T>::isZeroMatrix() const noexcept {
+bool Matrix<T>::isZeroMatrix() const noexcept {
     for (size_t i = 0; i < rows_; ++i) {
         for (size_t j = 0; j < cols_; ++j) 
             if (data_[i][j] != static_cast<T>(0)) return false;
@@ -253,7 +253,7 @@ inline bool Matrix<T>::isZeroMatrix() const noexcept {
     return true;
 }
 template <typename T>
-inline bool Matrix<T>::isSingular() const noexcept {
+bool Matrix<T>::isSingular() const noexcept {
     if (!isSquareMatrix()) return false;
 
     T determinant = determinant();
@@ -262,7 +262,7 @@ inline bool Matrix<T>::isSingular() const noexcept {
 }
 
 template <typename T>
-inline bool Matrix<T>::isDiagonalMatrix() const {
+bool Matrix<T>::isDiagonalMatrix() const {
     for (size_t i = 0; i < rows_; ++i) {
         for (size_t j = 0; j < cols_; ++j) 
             if (i != j && data_[i][j] != static_cast<T>(0)) 
@@ -277,16 +277,11 @@ inline bool Matrix<T>::isDiagonalMatrix() const {
 
 template<typename T>
 inline bool Matrix<T>::isTriangularMatrix() const {
-    for (size_t i = 0; i < rows_; ++i) {
-        for (size_t j = i + 1; j < cols_; ++j) 
-            if (data_[i][j] != static_cast<T>(0)) return false;
-    }
-
-    return true;
+    return isUpperTriangularMatrix() || isLowerTriangularMatrix();
 }
 
 template<typename T>
-inline bool Matrix<T>::isUpperTriangularMatrix() const {
+bool Matrix<T>::isUpperTriangularMatrix() const {
     for (size_t i = 0; i < rows_; ++i) {
         for (size_t j = 0; j < i; ++j) 
             if (data_[i][j] != static_cast<T>(0)) return false;
@@ -294,3 +289,24 @@ inline bool Matrix<T>::isUpperTriangularMatrix() const {
 
     return true;
 }
+
+template<typename T>
+bool Matrix<T>::isLowerTriangularMatrix() const {
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = i + 1; j < cols_; ++j) 
+            if (data_[i][j]!= static_cast<T>(0)) return false;
+    }
+
+    return true;
+}
+
+template<typename T>
+bool Matrix<T>::isOrthogonalMatrix() const {
+    if (!isSquareMatrix()) return false;
+
+    Matrix<T> transpose = this->transpose();
+    Matrix<T> identity = Matrix<T>::identity(rows_);
+
+    return (*this * transpose == identity) || (transpose * this == identity);
+}
+
