@@ -578,7 +578,6 @@ public:
      */
     void setTriangularMatrix(const T value, bool isUpper);
 
-
     /**
      * @brief Создаёт матрицу из двумерного массива.
      * 

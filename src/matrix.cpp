@@ -336,3 +336,19 @@ Matrix<T> Matrix<T>::makeIdentityMatrix(const size_t size = 2) const {
     return result;
 }
 
+template<typename T>
+Matrix<T> Matrix<T>::makeZeroMatrix(const size_t rows = 2, const size_t cols = 2) const {
+    if (rows < MIN_SIZE_MATRIX || cols < MIN_SIZE_MATRIX)
+        throw std::invalid_argument("Matrix size must be greater than or equal to " + std::to_string(MIN_SIZE_MATRIX))
+
+    Matrix<T> result(rows, cols);
+
+    for (size_t i = 0; i < rows; ++i) {
+        for (size_t j = 0; j < cols; ++j) {
+            result(i, j) = static_cast<T>(0);
+        }
+    }
+
+    return result;
+}
+
