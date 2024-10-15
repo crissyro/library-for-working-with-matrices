@@ -69,6 +69,23 @@ public:
     bool isDiagonalizable() const;
     bool isNormalMatrix() const;
 
+    void setZeroMatrix() noexcept;
+    void setIdentityMatrix() noexcept;
+    void setDiagonalizable() noexcept;
+    void setNormalMatrix() noexcept;
+    void setOrthogonalMatrix() noexcept;
+    void setDiagonalMatrix(const T* diagonalArray);
+    void setUpperTriangularMatrix() noexcept;
+    void setLowerTriangularMatrix() noexcept;
+    void setTriangularMatrix(const T* diagonalArray, bool isUpper);
+    void setOrthogonalMatrix(const Matrix& other);
+    void setDiagonalMatrix(const T value);
+    void setUpperTriangularMatrix(const T value);
+    void setLowerTriangularMatrix(const T value);
+    void setTriangularMatrix(const T value, bool isUpper);
+
+
+
     void makeMatrixFromArray(const T** array);
     void printMatrix() const;
     void sumMatrix(const Matrix& other);

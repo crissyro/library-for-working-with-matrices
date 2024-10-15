@@ -248,4 +248,13 @@ inline bool Matrix<T>::isZeroMatrix() const noexcept {
     return true;
 }
 
+template <typename T>
+inline bool Matrix<T>::isSingular() const noexcept {
+    if (!isSquareMatrix()) return false;
 
+    Matrix<T> adjugate = adjugateMatrix();
+    Matrix<T> identity(rows_, cols_);
+    identity.setIdentity();
+
+    return (*this * adjugate) == identity;
+}
