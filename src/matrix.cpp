@@ -352,3 +352,24 @@ Matrix<T> Matrix<T>::makeZeroMatrix(const size_t rows = 2, const size_t cols = 2
     return result;
 }
 
+template<typename T>
+void Matrix<T>::setZeroMatrix() noexcept {
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j < cols_; ++j) 
+            data_[i][j] = static_cast<T>(0);
+    }
+}
+
+template<typename T>
+void Matrix<T>::setIdentityMatrix() {
+    if (!isSquareMatrix())
+        throw std::error_condition("Matrix must be square")
+
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j < cols_; ++j) 
+            data_[i][j] = (i == j)? static_cast<T>(1) : static_cast<T>(0);
+    }
+}
+
+
+

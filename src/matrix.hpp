@@ -459,7 +459,7 @@ public:
      * 
      * @tparam T Тип элементов матрицы.
      */
-    void setIdentityMatrix() noexcept;
+    void setIdentityMatrix();
 
     /**
      * @brief Преобразует текущую матрицу в диагонализируемую.
