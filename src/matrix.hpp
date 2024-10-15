@@ -28,8 +28,8 @@ private:
     void copyMatrix(const Matrix<T>& other) noexcept;
 
 public:
-    size_t getRows() const noexcept { return rows_; }
-    size_t getCols() const noexcept { return cols_; }
+    size_t getRows() const noexcept;
+    size_t getCols() const noexcept;
 
     Matrix() noexcept;
     Matrix(const size_t size) noexcept;

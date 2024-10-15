@@ -27,6 +27,12 @@ void Matrix<T>::copyMatrix(const Matrix<T>& other) noexcept {
         std::copy(other.data_[i].get(), other.data_[i].get() + cols_, data_[i].get());
 }
 
+template <typename T>
+inline size_t Matrix<T>::getRows() const noexcept { return rows_; }
+
+template <typename T>
+inline size_t Matrix<T>::getCols() const noexcept { return cols_; }
+
 template<typename T>
 inline Matrix<T>::Matrix() noexcept : rows_(MIN_SIZE_MATRIX), cols_(MIN_SIZE_MATRIX) {
     initMatrix();
@@ -241,3 +247,5 @@ inline bool Matrix<T>::isZeroMatrix() const noexcept {
 
     return true;
 }
+
+
