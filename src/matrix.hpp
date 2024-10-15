@@ -505,7 +505,7 @@ public:
      * 
      * @tparam T Тип элементов матрицы.
      */
-    void setUpperTriangularMatrix() noexcept;
+    void setUpperTriangularMatrix(const T* upperTriangularArray);
 
     /**
      * @brief Устанавливает текущую матрицу как нижнетреугольную.
@@ -514,7 +514,7 @@ public:
      * 
      * @tparam T Тип элементов матрицы.
      */
-    void setLowerTriangularMatrix() noexcept;
+    void setLowerTriangularMatrix(const T* lowerTriangularArray);
 
     /**
      * @brief Устанавливает текущую матрицу как треугольную матрицу.

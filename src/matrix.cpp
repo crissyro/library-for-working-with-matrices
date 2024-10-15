@@ -426,3 +426,32 @@ void Matrix<T>::setDiagonalMatrix(const T* diagonalArray) {
     }
 }
 
+// check
+template<typename T>
+void Matrix<T>::setUpperTriangularMatrix(const T* upperTriangularArray) {
+    if (!isSquareMatrix())
+        throw std::error_condition("Matrix must be square");
+
+    if (upperTriangularArray == nullptr || sizeof(upperTriangularArray) / sizeof(*upperTriangularArray) != rows_)
+        throw std::error_argument("Len array must be equal with matrix upper triangular elements number")
+
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j <= i; ++j) 
+            data_[i][j] = upperTriangularArray[i * (i + 1) / 2 + j];
+    }
+}
+
+//check
+template<typename T>
+void Matrix<T>::setLowerTriangularMatrix(const T* lowerTriangularArray) {
+    if (!isSquareMatrix())
+        throw std::error_condition("Matrix must be square");
+
+    if (lowerTriangularArray == nullptr || sizeof(lowerTriangularArray) / sizeof(*lowerTriangularArray) != rows_)
+        throw std::error_argument("Len array must be equal with matrix lower triangular elements number")
+
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = i; j < cols_; ++j) 
+            data_[i][j] = lowerTriangularArray[i * (i + 1) / 2 + j - i];
+    }
+}
