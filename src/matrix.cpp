@@ -502,3 +502,6 @@ inline Matrix<T> Matrix<T>::sumMatrix(const Matrix<T>& mat1, const Matrix<T>& ma
 
 template<typename T>
 inline Matrix<T> Matrix<T>::subMatrix(const Matrix<T>& mat1, const Matrix<T>& mat2) { return mat1 - mat2; }
+
+template<typename T>
+inline Matrix<T> Matrix<T>::mulMatrix(const Matrix<T>& mat1, const Matrix<T>& mat2) { return mat1 * mat2; }
