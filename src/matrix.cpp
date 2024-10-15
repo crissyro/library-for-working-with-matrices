@@ -220,3 +220,14 @@ inline bool Matrix<T>::isSymmetricMatrix() const noexcept {
 
     return true;
 }
+
+template <typename T>
+inline bool Matrix<T>::isIdentityMatrix() const noexcept {
+    if (!isSquareMatrix()) return false;
+
+    for (size_t i = 0; i < rows_; ++i) {
+        if (data_[i][i] != static_cast<T>(1)) return false;
+    }
+
+    return true;
+}

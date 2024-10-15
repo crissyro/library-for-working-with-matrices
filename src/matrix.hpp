@@ -58,7 +58,7 @@ public:
     bool isEqualMatrix(const Matrix& other) const noexcept;
     bool isSquareMatrix() const noexcept;
     bool isSymmetricMatrix() const noexcept;
-    bool isEMatrix() const;
+    bool isDiagonalMatrix() const;
     bool isIdentityMatrix() const;
     bool isZeroMatrix() const;
     bool isSingular() const;
