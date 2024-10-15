@@ -247,14 +247,23 @@ inline bool Matrix<T>::isZeroMatrix() const noexcept {
 
     return true;
 }
-
 template <typename T>
 inline bool Matrix<T>::isSingular() const noexcept {
     if (!isSquareMatrix()) return false;
 
     Matrix<T> adjugate = adjugateMatrix();
     Matrix<T> identity(rows_, cols_);
-    identity.setIdentity();
+    identity.setIdentityMatrix();
 
     return (*this * adjugate) == identity;
+}
+
+template <typename T>
+inline bool Matrix<T>::isDiagonalMatrix() const {
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j < cols_; ++j) 
+            if (i!= j && data_[i][j] != static_cast<T>(0)) return false;
+    }
+
+    return true;
 }
