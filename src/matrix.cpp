@@ -339,7 +339,7 @@ Matrix<T> Matrix<T>::makeIdentityMatrix(const size_t size = 2) const {
 template<typename T>
 Matrix<T> Matrix<T>::makeZeroMatrix(const size_t rows = 2, const size_t cols = 2) const {
     if (rows < MIN_SIZE_MATRIX || cols < MIN_SIZE_MATRIX)
-        throw std::invalid_argument("Matrix size must be greater than or equal to " + std::to_string(MIN_SIZE_MATRIX))
+        throw std::invalid_argument("Matrix size must be greater than or equal to " + std::to_string(MIN_SIZE_MATRIX));
 
     Matrix<T> result(rows, cols);
 
@@ -363,13 +363,39 @@ void Matrix<T>::setZeroMatrix() noexcept {
 template<typename T>
 void Matrix<T>::setIdentityMatrix() {
     if (!isSquareMatrix())
-        throw std::error_condition("Matrix must be square")
+        throw std::error_condition("Matrix must be square");
 
     for (size_t i = 0; i < rows_; ++i) {
         for (size_t j = 0; j < cols_; ++j) 
-            data_[i][j] = (i == j)? static_cast<T>(1) : static_cast<T>(0);
+            data_[i][j] = (i == j) ? static_cast<T>(1) : static_cast<T>(0);
     }
 }
 
+template<typename T>
+void Matrix<T>::setDiagonalizable() {
+    if (!isSquareMatrix())
+        throw std::error_condition("Matrix must be square");
 
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j < cols_; ++j) {
+            if (data_[i][j] != 0)
+                data_[i][j] = static_cast<T>(0);
+            
+            else if (i == j && data_[i][j] == 0)
+                data_[i][j] = static_cast<T>(1);
+        }
+    }
+}
+
+template <typename T>
+void Matrix<T>::setNormalMatrix() {
+    if (!isSquareMatrix())
+        throw std::error_condition("Matrix must be square");
+
+    Matrix<T> transpose = this->transposeMatrix();
+    Matrix<T> identity = Matrix<T>::makeIdentityMatrix(rows_);
+
+    if (*this * transpose!= transpose * this || *this * identity!= identity)
+        throw std::error_condition("Matrix is not normal");
+}
 

@@ -468,7 +468,7 @@ public:
      * 
      * @tparam T Тип элементов матрицы.
      */
-    void setDiagonalizable() noexcept;
+    void setDiagonalizable();
 
     /**
      * @brief Преобразует текущую матрицу в нормальную матрицу.
@@ -477,7 +477,7 @@ public:
      * 
      * @tparam T Тип элементов матрицы.
      */
-    void setNormalMatrix() noexcept;
+    void setNormalMatrix();
 
     /**
      * @brief Преобразует текущую матрицу в ортогональную.
