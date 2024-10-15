@@ -641,7 +641,7 @@ public:
      * @return Новая матрица, представляющая результат сложения.
      * @throws std::invalid_argument Если размеры матриц не совпадают.
      */
-    Matrix sumMatrix(const Matrix& mat1, const Matrix& mat2);
+    Matrix sumMatrix(const Matrix& mat1, const Matrix& mat2) const;
 
     /**
      * @brief Выполняет вычитание одной матрицы из другой.
@@ -654,7 +654,7 @@ public:
      * @return Новая матрица, представляющая результат вычитания.
      * @throws std::invalid_argument Если размеры матриц не совпадают.
      */
-    Matrix subMatrix(const Matrix& mat1, const Matrix& mat2);
+    Matrix subMatrix(const Matrix& mat1, const Matrix& mat2) const;
 
     /**
      * @brief Выполняет умножение двух матриц.
@@ -667,7 +667,7 @@ public:
      * @return Новая матрица, представляющая результат умножения.
      * @throws std::invalid_argument Если количество столбцов первой матрицы не совпадает с количеством строк второй матрицы.
      */
-    Matrix mulMatrix(const Matrix& mat1, const Matrix& mat2);
+    Matrix mulMatrix(const Matrix& mat1, const Matrix& mat2) const;
 
     /**
      * @brief Умножает все элементы матрицы на скаляр.
@@ -680,7 +680,7 @@ public:
      * @param scalar Значение скаляра для умножения.
      * @return Новая матрица, представляющая результат умножения.
      */
-    Matrix mulScalar(const Matrix& mat, const T& scalar);
+    Matrix mulScalar(const Matrix& mat, const T& scalar) const;
 
 
     /**

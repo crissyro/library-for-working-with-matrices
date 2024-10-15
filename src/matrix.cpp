@@ -498,10 +498,38 @@ template<typename T>
 inline void Matrix<T>::mulScalar(const T& scalar) { this *= scalar; }
 
 template<typename T>
-inline Matrix<T> Matrix<T>::sumMatrix(const Matrix<T>& mat1, const Matrix<T>& mat2) { return mat1 + mat2; }
+inline Matrix<T> Matrix<T>::sumMatrix(const Matrix<T>& mat1, const Matrix<T>& mat2) const { return mat1 + mat2; }
 
 template<typename T>
-inline Matrix<T> Matrix<T>::subMatrix(const Matrix<T>& mat1, const Matrix<T>& mat2) { return mat1 - mat2; }
+inline Matrix<T> Matrix<T>::subMatrix(const Matrix<T>& mat1, const Matrix<T>& mat2) const { return mat1 - mat2; }
 
 template<typename T>
-inline Matrix<T> Matrix<T>::mulMatrix(const Matrix<T>& mat1, const Matrix<T>& mat2) { return mat1 * mat2; }
+inline Matrix<T> Matrix<T>::mulMatrix(const Matrix<T>& mat1, const Matrix<T>& mat2) const { return mat1 * mat2; }
+
+template<typename T>
+inline Matrix<T> Matrix<T>::mulScalar(const Matrix<T>& mat, const T& scalar) const { return mat * scalar; }
+
+template<typename T>
+void Matrix<T>::transposeMatrix() {
+    Matrix<T> result(cols_, rows_);
+
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j < cols_; ++j) 
+            result(i, j) = data_[j][i];
+    }
+
+    *this = result;
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::transposeMatrix(const Matrix<T>& other) const {
+    Matrix<T> result(cols_, rows_);
+
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j < cols_; ++j) {
+            result(j, i) = data_[i][j];
+        }
+    }
+
+    return result;
+}
