@@ -10,7 +10,7 @@ void Matrix<T>::initMatrix() {
 }
 
 template<typename T>
-void Matrix<T>::freeMemoryMatrix() noexcept {
+inline void Matrix<T>::freeMemoryMatrix() noexcept {
     data_.reset();
     rows_ = 0;
     cols_ = 0;
@@ -28,29 +28,29 @@ void Matrix<T>::copyMatrix(const Matrix<T>& other) {
 }
 
 template<typename T>
-Matrix<T>::Matrix() noexcept : rows_(MIN_SIZE_MATRIX), cols_(MIN_SIZE_MATRIX) {
+inline Matrix<T>::Matrix() noexcept : rows_(MIN_SIZE_MATRIX), cols_(MIN_SIZE_MATRIX) {
     initMatrix();
 }
 
 template<typename T>
-Matrix<T>::Matrix(const size_t size) noexcept : rows_(size), cols_(size) {
+inline Matrix<T>::Matrix(const size_t size) noexcept : rows_(size), cols_(size) {
     initMatrix();
 }
 
 template<typename T>
-Matrix<T>::Matrix(const size_t rows, const size_t cols) noexcept : rows_(rows), cols_(cols) {
+inline Matrix<T>::Matrix(const size_t rows, const size_t cols) noexcept : rows_(rows), cols_(cols) {
     initMatrix();
 }
 
 template<typename T>
-Matrix<T>::Matrix(const size_t rows, const size_t cols, T** array) noexcept : rows_(rows), cols_(cols) {
+inline Matrix<T>::Matrix(const size_t rows, const size_t cols, T** array) noexcept : rows_(rows), cols_(cols) {
     initMatrix();
     for (size_t i = 0; i < rows_; ++i) 
         std::copy(array[i], array[i] + cols_, data_[i].get());
 }
 
 template<typename T>
-Matrix<T>::Matrix(const Matrix<T>& other) noexcept {
+inline Matrix<T>::Matrix(const Matrix<T>& other) noexcept {
     copyMatrix(other);
 }
 
@@ -155,32 +155,27 @@ const T& Matrix<T>::operator()(const size_t row, const size_t col) const {
 }
 
 template<typename T>
-Matrix<T>& Matrix<T>::operator+=(const Matrix<T>& other) {
+inline Matrix<T>& Matrix<T>::operator+=(const Matrix<T>& other) {
     *this = *this + *other
     return *this;
 }
 
 template<typename T>
-Matrix<T>& Matrix<T>::operator-=(const Matrix<T>& other) {
+inline Matrix<T>& Matrix<T>::operator-=(const Matrix<T>& other) {
     *this = *this - *other
     return *this;
 }
 
 template<typename T>
-Matrix<T>& Matrix<T>::operator*=(const Matrix<T>& other) {
+inline Matrix<T>& Matrix<T>::operator*=(const Matrix<T>& other) {
     *this = *this * *other
     return *this;
 }
 
 template<typename T>
-Matrix<T>& Matrix<T>::operator*=(const T scalar) {
+inline Matrix<T>& Matrix<T>::operator*=(const T scalar) {
     *this = *this * scalar
     return *this;
-}
-
-template<typename T>
-bool Matrix<T>::isEqualMatrix(const Matrix& other) const {
-    return *this == *other
 }
 
 template<typename T>
@@ -204,3 +199,7 @@ std::istream& operator>>(std::istream& is, Matrix<T>& matrix) {
     return is;
 }
 
+template<typename T>
+inline bool Matrix<T>::isEqualMatrix(const Matrix& other) const {
+    return *this == *other
+}
