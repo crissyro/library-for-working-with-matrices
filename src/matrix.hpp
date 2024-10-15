@@ -587,7 +587,7 @@ public:
      * @param array Двумерный массив, содержащий элементы для инициализации матрицы.
      * @return Новая матрица, созданная на основе переданного массива.
      */
-    static Matrix makeMatrixFromArray(const T** array);
+    Matrix makeMatrixFromArray(const T** array);
 
     /**
      * @brief Выводит матрицу в консоль.
