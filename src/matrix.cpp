@@ -310,3 +310,17 @@ bool Matrix<T>::isOrthogonalMatrix() const {
     return (*this * transpose == identity) || (transpose * this == identity);
 }
 
+template<typename T>
+bool Matrix<T>::isNormalMatrix() const {
+    if (!isSquareMatrix()) return false;
+
+    Matrix<T> transpose = this->transpose();
+    Matrix<T> identity = Matrix<T>::identity(rows_);
+
+    return (*this * transpose == transpose * this) && (*this * identity == identity);
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::makeIdentityMatrix(const size_t size) const {
+
+}
