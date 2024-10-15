@@ -455,3 +455,21 @@ void Matrix<T>::setLowerTriangularMatrix(const T* lowerTriangularArray) {
             data_[i][j] = lowerTriangularArray[i * (i + 1) / 2 + j - i];
     }
 }
+
+template<typename T>
+void Matrix<T>::setTriangularMatrix(const T value, bool isUpper = true) {
+    if (!isSquareMatrix())
+        throw std::error_condition("Matrix must be square");
+
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j < cols_; ++j) {
+            if (i < j && isUpper)
+                data_[i][j] = static_cast<T>(0);
+            else if (i > j &&!isUpper)
+                data_[i][j] = static_cast<T>(0);
+            else
+                data_[i][j] = value;
+        }
+    }
+}
+

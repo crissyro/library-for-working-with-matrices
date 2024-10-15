@@ -576,7 +576,7 @@ public:
      * @param value Значение для всех диагональных элементов.
      * @param isUpper Если true, создаётся верхнетреугольная матрица, иначе — нижнетреугольная.
      */
-    void setTriangularMatrix(const T value, bool isUpper);
+    void setTriangularMatrix(const T value, bool isUpper = true);
 
     /**
      * @brief Создаёт матрицу из двумерного массива.
