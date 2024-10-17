@@ -682,7 +682,6 @@ public:
      */
     Matrix mulScalar(const Matrix& mat, const T& scalar) const;
 
-
     /**
      * @brief Транспонирует текущую матрицу.
      * 

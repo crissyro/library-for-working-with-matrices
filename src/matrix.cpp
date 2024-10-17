@@ -1,4 +1,4 @@
-#include "matrix.hpp"//-
+#include "matrix.hpp"
 
 template<typename T>
 void Matrix<T>::initMatrix() noexcept {
@@ -526,10 +526,40 @@ Matrix<T> Matrix<T>::transposeMatrix(const Matrix<T>& other) const {
     Matrix<T> result(cols_, rows_);
 
     for (size_t i = 0; i < rows_; ++i) {
-        for (size_t j = 0; j < cols_; ++j) {
+        for (size_t j = 0; j < cols_; ++j) 
             result(j, i) = data_[i][j];
-        }
     }
 
     return result;
 }
+
+template<typename T>
+T Matrix<T>::determinant() const {
+    if (!isSquareMatrix())
+        throw std::error_condition("Matrix must be square");
+
+    if (rows_ == 1)
+        return data_[0][0];
+
+    if (rows_ == 2)
+        return data_[0][0] * data_[1][1] - data_[0][1] * data_[1][0];
+
+    T det = static_cast<T>(0);
+
+    for (size_t i = 0; i < cols_; ++i) {
+        Matrix<T> minor(rows_ - 1, cols_ - 1);
+        for (size_t j = 1; j < rows_; ++j) {
+            size_t minorIndex = 0;
+            for (size_t k = 0; k < cols_; ++k) {
+                if (k == i) continue;
+
+                minor(j - 1, minorIndex++) = data_[j][i];
+            }
+        }
+    
+        det += (i % 2 == 0)? data_[0][i] * minor.determinant() : -data_[0][i] * minor.determinant();
+    }
+
+    return det;
+}
+
