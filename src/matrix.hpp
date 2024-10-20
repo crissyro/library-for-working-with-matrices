@@ -1334,7 +1334,27 @@ T Matrix<T>::determinant() const {
 
 template<typename T>
 Matrix<T> Matrix<T>::cofactorMatrix() const {
+    if (!isSquareMatrix()) throw std::error_condition("Matrix must be square");
 
+    Matrix<T> cofactor(rows_, cols_);
+
+    for (size_t i = 0; i < rows_; i++) {
+        for (size_t j = 0; j < cols_; j++) {
+            Matrix<T> minor(rows_ - 1, cols_ - 1);
+            for (size_t m = 0; m < rows_ - 1; m++) {
+                size_t minorIndex = 0;
+                for (size_t n = 0; n < cols_; n++) {
+                    if (n == j) continue;
+
+                    minor(m, minorIndex++) = data_[m + 1][n];
+                }
+            }
+
+            cofactor(i, j) = ((i + j) % 2 == 0) ? minor.determinant() : -minor.determinant();
+        }
+    }
+
+    return cofactor;
 }
 
 template<typename T>
@@ -1354,7 +1374,7 @@ Matrix<T> Matrix<T>::inverseMatrix(const Matrix& other) const {
 
 template<typename T>
 Matrix<T> Matrix<T>::calcComplementsMatrix() const {
-    
+
 }
 
 } //matrix_lib
