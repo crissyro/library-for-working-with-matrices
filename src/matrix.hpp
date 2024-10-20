@@ -767,7 +767,7 @@ public:
      */
     Matrix calcComplementsMatrix() const;
 
-};
+}; // class Matrix;
 
 template<typename T>
 void Matrix<T>::initMatrix() noexcept {
@@ -1330,6 +1330,31 @@ T Matrix<T>::determinant() const {
     }
 
     return det;
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::cofactorMatrix() const {
+
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::adjugateMatrix() const {
+
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::inverseMatrix() const {
+
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::inverseMatrix(const Matrix& other) const {
+
+}
+
+template<typename T>
+Matrix<T> Matrix<T>::calcComplementsMatrix() const {
+    
 }
 
 } //matrix_lib
