@@ -757,16 +757,6 @@ public:
      */
     Matrix inverseMatrix(const Matrix& other) const;
 
-    /**
-     * @brief Вычисляет матрицу алгебраических дополнений.
-     * 
-     * Возвращает матрицу, содержащую алгебраические дополнения для текущей матрицы.
-     * 
-     * @tparam T Тип элементов матрицы.
-     * @return Матрица алгебраических дополнений.
-     */
-    Matrix calcComplementsMatrix() const;
-
 }; // class Matrix;
 
 template<typename T>
@@ -1386,11 +1376,6 @@ Matrix<T> Matrix<T>::inverseMatrix(const Matrix& other) const {
     Matrix<T> adjugate = this->adjugateMatrix();
     
     return adjugate * (1 / det);
-}
-
-template<typename T>
-Matrix<T> Matrix<T>::calcComplementsMatrix() const {
-
 }
 
 } //matrix_lib
