@@ -1359,17 +1359,33 @@ Matrix<T> Matrix<T>::cofactorMatrix() const {
 
 template<typename T>
 Matrix<T> Matrix<T>::adjugateMatrix() const {
-
+    return this->cofactorMatrix().transposeMatrix();
 }
 
 template<typename T>
 Matrix<T> Matrix<T>::inverseMatrix() const {
+    if (!isSquareMatrix()) throw std::error_condition("Matrix must be square");
 
+    T determinant = this->determinant();
+
+    if (determinant == 0)  throw std::runtime_error("Matrix is singular and cannot be inverted.");
+
+    Matrix<T> adjugate = this->adjugateMatrix();
+
+    return adjugate * (1 / det);
 }
 
 template<typename T>
 Matrix<T> Matrix<T>::inverseMatrix(const Matrix& other) const {
+    if (!other.isSquareMatrix()) throw std::error_condition("Matrix must be square");
 
+    T determinant = other.determinant();
+
+    if (determinant == 0)  throw std::runtime_error("Matrix is singular and cannot be inverted.");
+
+    Matrix<T> adjugate = this->adjugateMatrix();
+    
+    return adjugate * (1 / det);
 }
 
 template<typename T>
