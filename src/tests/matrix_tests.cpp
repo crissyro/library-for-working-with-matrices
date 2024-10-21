@@ -167,6 +167,11 @@ TEST(MatrixTest, ExceptionAdjugateMatrix) {
     EXPECT_THROW(mat.adjugateMatrix(), std::logic_error);
 }
 
+TEST(MatrixTest, ExceptionInverseMatrix) {
+    Matrix<int> mat(2, 3);
+    EXPECT_THROW(mat.inverseMatrix(), std::logic_error);
+}
+
 // TEST(MatrixTest, Determinant) {
 //     Matrix<int> mat(2, 2);
 //     mat(0, 0) = 1; mat(0, 1) = 2;
