@@ -275,8 +275,8 @@ public:
      * @param matrix Матрица, которую нужно вывести.
      * @return Ссылка на поток вывода.
      */
-    template<typename T>
-    std::ostream& operator<<(std::ostream& os, const Matrix<T>& matrix);
+    template<typename U>
+    friend std::ostream& operator<<(std::ostream& os, const Matrix<U>& matrix);
 
     /**
      * @brief Оператор ввода матрицы из потока.
@@ -290,10 +290,9 @@ public:
      * @param matrix Матрица, которую нужно заполнить данными из потока.
      * @return Ссылка на поток ввода.
      */
-    template<typename T>
-    std::istream& operator>>(std::istream& is, Matrix<T>& matrix);
+    template<typename U>
+    friend std::istream& operator>>(std::istream& is, Matrix<U>& matrix);
 
-    
     /**
      * @brief Проверяет, равна ли текущая матрица другой матрице.
      * 
@@ -429,7 +428,7 @@ public:
      * @return Новый объект матрицы, представляющий единичную матрицу.
      * @throws std::invalid_argument Если размер меньше MIN_SIZE_MATRIX.
      */
-    Matrix makeIdentityMatrix(const size_t size = 2) const;
+    Matrix makeIdentityMatrix(const size_t size = MIN_SIZE_MATRIX) const;
 
     /**
      * @brief Создает нулевую матрицу заданных размеров.
@@ -442,7 +441,7 @@ public:
      * @return Новый объект матрицы, где все элементы инициализированы как 0.
      * @throws std::invalid_argument Если количество строк или столбцов меньше MIN_SIZE_MATRIX.
      */
-    Matrix makeZeroMatrix(const size_t rows = 2, const size_t cols = 2) const;
+    Matrix makeZeroMatrix(const size_t rows = MIN_SIZE_MATRIX, const size_t cols = MIN_SIZE_MATRIX) const;
 
     /**
      * @brief Устанавливает текущую матрицу как нулевую.
@@ -945,8 +944,8 @@ inline Matrix<T>& Matrix<T>::operator*=(const T scalar) {
     return *this;
 }
 
-template<typename T>
-std::ostream& operator<<(std::ostream& os, const Matrix<T>& matrix) {
+template<typename U>
+std::ostream& operator<<(std::ostream& os, const Matrix<U>& matrix) {
     for (size_t i = 0; i < matrix.rows_; ++i) {
         for (size_t j = 0; j < matrix.cols_; ++j) 
             os << matrix.data_[i][j] << " ";
@@ -956,8 +955,8 @@ std::ostream& operator<<(std::ostream& os, const Matrix<T>& matrix) {
     return os;
 }
 
-template<typename T>
-std::istream& operator>>(std::istream& is, Matrix<T>& matrix) {
+template<typename U>
+std::istream& operator>>(std::istream& is, Matrix<U>& matrix) {
     for (size_t i = 0; i < matrix.rows_; ++i) {
         for (size_t j = 0; j < matrix.cols_; ++j) 
             is >> matrix.data_[i][j];
@@ -968,12 +967,12 @@ std::istream& operator>>(std::istream& is, Matrix<T>& matrix) {
 
 template<typename T>
 inline bool Matrix<T>::isEqualMatrix(const Matrix& other) const noexcept {
-    return *this == *other
+    return *this == *other;
 }
 
 template<typename T>
 inline bool Matrix<T>::isSquareMatrix() const noexcept {
-    return rows_ == columns_;
+    return rows_ == cols_;
 } 
 
 template<typename T>
@@ -1082,7 +1081,7 @@ bool Matrix<T>::isNormalMatrix() const {
 }
 
 template<typename T>
-Matrix<T> Matrix<T>::makeIdentityMatrix(const size_t size = 2) const {
+Matrix<T> Matrix<T>::makeIdentityMatrix(const size_t size) const {
     if (size < MIN_SIZE_MATRIX)
         throw std::invalid_argument("Matrix size must be greater than or equal to " + std::to_string(MIN_SIZE_MATRIX));
 
@@ -1098,7 +1097,7 @@ Matrix<T> Matrix<T>::makeIdentityMatrix(const size_t size = 2) const {
 }
 
 template<typename T>
-Matrix<T> Matrix<T>::makeZeroMatrix(const size_t rows = 2, const size_t cols = 2) const {
+Matrix<T> Matrix<T>::makeZeroMatrix(const size_t rows, const size_t cols) const {
     if (rows < MIN_SIZE_MATRIX || cols < MIN_SIZE_MATRIX)
         throw std::invalid_argument("Matrix size must be greater than or equal to " + std::to_string(MIN_SIZE_MATRIX));
 
@@ -1178,7 +1177,7 @@ void Matrix<T>::setDiagonalMatrix(const T* diagonalArray, const size_t diagonalA
         throw std::logic_error("Matrix must be square");
 
     if (diagonalArray == nullptr || diagonalArrayLength != rows_)
-        throw std::logic_error("Len array must be equal with matrix rows number")
+        throw std::logic_error("Len array must be equal with matrix rows number");
 
     for (size_t i = 0; i < rows_; ++i) {
         for (size_t j = 0; j < cols_; ++j) {
@@ -1194,10 +1193,10 @@ void Matrix<T>::setUpperTriangularMatrix(const T* upperTriangularArray, const si
         throw std::logic_error("Matrix must be square");
 
     if (upperTriangularArray == nullptr || upperTriangularArrayLength != rows_)
-        throw std::logic_error("Len array must be equal with matrix upper triangular elements number")
+        throw std::logic_error("Len array must be equal with matrix upper triangular elements number");
 
     for (size_t i = 0; i < rows_; ++i) {
-        for (size_t j = 0; j <= i; ++j) 
+        for (size_t j = i; j < cols_; ++j) 
             data_[i][j] = upperTriangularArray[i * (i + 1) / 2 + j];
     }
 }
@@ -1209,21 +1208,21 @@ void Matrix<T>::setLowerTriangularMatrix(const T* lowerTriangularArray, const si
         throw std::logic_error("Matrix must be square");
 
     if (lowerTriangularArray == nullptr || lowerTriangularArrayLength != rows_)
-        throw std::logic_error("Len array must be equal with matrix lower triangular elements number")
-
+        throw std::logic_error("Len array must be equal with matrix lower triangular elements number");
+    
     for (size_t i = 0; i < rows_; ++i) {
-        for (size_t j = i; j < cols_; ++j) 
-            data_[i][j] = lowerTriangularArray[i * (i + 1) / 2 + j - i];
+        for (size_t j = 0; j <= i; ++j) 
+            data_[i][j] = lowerTriangularArray[i * (i + 1) / 2 + j];
     }
 }
 
 template<typename T>
-void Matrix<T>::setTriangularMatrix(const T* diagonalArray, const size_t diagonalArrayLength, bool isUpper = true) {
+void Matrix<T>::setTriangularMatrix(const T* diagonalArray, const size_t diagonalArrayLength, bool isUpper) {
     if (!isSquareMatrix())
         throw std::logic_error("Matrix must be square");
 
     if (diagonalArray == nullptr || diagonalArrayLength != rows_)
-        throw std::logic_error("Len array must be equal with matrix diagonal elements number")
+        throw std::logic_error("Len array must be equal with matrix diagonal elements number");
 
     for (size_t i = 0; i < rows_; ++i) {
         for (size_t j = 0; j < cols_; ++j) {
@@ -1235,7 +1234,7 @@ void Matrix<T>::setTriangularMatrix(const T* diagonalArray, const size_t diagona
 }
 
 template<typename T>
-void Matrix<T>::setTriangularMatrix(const T value, bool isUpper = true) {
+void Matrix<T>::setTriangularMatrix(const T value, bool isUpper) {
     if (!isSquareMatrix())
         throw std::logic_error("Matrix must be square");
 
@@ -1381,7 +1380,7 @@ Matrix<T> Matrix<T>::inverseMatrix() const {
 
     Matrix<T> adjugate = this->adjugateMatrix();
 
-    return adjugate * (1 / det);
+    return adjugate * (1 / determinant);
 }
 
 template<typename T>
@@ -1394,7 +1393,7 @@ Matrix<T> Matrix<T>::inverseMatrix(const Matrix& other) const {
 
     Matrix<T> adjugate = this->adjugateMatrix();
     
-    return adjugate * (1 / det);
+    return adjugate * (1 / determinant);
 }
 
 } //matrix_lib
