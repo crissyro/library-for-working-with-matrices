@@ -172,6 +172,13 @@ TEST(MatrixTest, ExceptionInverseMatrix) {
     EXPECT_THROW(mat.inverseMatrix(), std::logic_error);
 }
 
+TEST(MatrixTest, ExceptionCofactorZeroDeterminantMatrix) {
+    Matrix<int> mat(2, 2);
+    EXPECT_EQ(mat.determinant(), 0);
+    mat.makeIdentityMatrix();
+    EXPECT_THROW(mat.inverseMatrix(), std::runtime_error);
+}
+
 // TEST(MatrixTest, Determinant) {
 //     Matrix<int> mat(2, 2);
 //     mat(0, 0) = 1; mat(0, 1) = 2;
