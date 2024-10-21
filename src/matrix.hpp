@@ -497,7 +497,7 @@ public:
      * @tparam T Тип элементов матрицы.
      * @param diagonalArray Массив элементов для главной диагонали.
      */
-    void setDiagonalMatrix(const T* diagonalArray);
+    void setDiagonalMatrix(const T* diagonalArray, const size_t diagonalArrayLength);
 
     /**
      * @brief Устанавливает текущую матрицу как верхнетреугольную.
@@ -506,7 +506,7 @@ public:
      * 
      * @tparam T Тип элементов матрицы.
      */
-    void setUpperTriangularMatrix(const T* upperTriangularArray);
+    void setUpperTriangularMatrix(const T* upperTriangularArray, const size_t upperTriangularArrayLength);
 
     /**
      * @brief Устанавливает текущую матрицу как нижнетреугольную.
@@ -515,7 +515,7 @@ public:
      * 
      * @tparam T Тип элементов матрицы.
      */
-    void setLowerTriangularMatrix(const T* lowerTriangularArray);
+    void setLowerTriangularMatrix(const T* lowerTriangularArray, const size_t lowerTriangularArrayLength);
 
     /**
      * @brief Устанавливает текущую матрицу как треугольную матрицу.
@@ -526,7 +526,7 @@ public:
      * @param diagonalArray Массив элементов для главной диагонали.
      * @param isUpper Если true, создаётся верхнетреугольная матрица, иначе — нижнетреугольная.
      */
-    void setTriangularMatrix(const T* diagonalArray, bool isUpper);
+    void setTriangularMatrix(const T* diagonalArray, const size_t diagonalArrayLength, bool isUpper = true);
 
     /**
      * @brief Преобразует текущую матрицу в ортогональную, используя другую матрицу.
@@ -761,6 +761,8 @@ public:
 
 template<typename T>
 void Matrix<T>::initMatrix() noexcept {
+    if (rows_ < 0 || cols_ < 0) throw std::invalid_argument("Matrix must be non negative or zero"); 
+
     data_ = std::make_unique<std::unique_ptr<T[]>[]>(rows_);
     for (size_t i = 0; i < rows_; ++i) {
         data_[i] = std::make_unique<T[]>(cols_);
@@ -921,25 +923,25 @@ const T& Matrix<T>::operator()(const size_t row, const size_t col) const {
 
 template<typename T>
 inline Matrix<T>& Matrix<T>::operator+=(const Matrix<T>& other) {
-    *this = *this + *other
+    *this = *this + other;
     return *this;
 }
 
 template<typename T>
 inline Matrix<T>& Matrix<T>::operator-=(const Matrix<T>& other) {
-    *this = *this - *other
+    *this = *this - other;
     return *this;
 }
 
 template<typename T>
 inline Matrix<T>& Matrix<T>::operator*=(const Matrix<T>& other) {
-    *this = *this * *other
+    *this = *this * other;
     return *this;
 }
 
 template<typename T>
 inline Matrix<T>& Matrix<T>::operator*=(const T scalar) {
-    *this = *this * scalar
+    *this = *this * scalar;
     return *this;
 }
 
@@ -1122,7 +1124,7 @@ void Matrix<T>::setZeroMatrix() noexcept {
 template<typename T>
 void Matrix<T>::setIdentityMatrix() {
     if (!isSquareMatrix())
-        throw std::error_condition("Matrix must be square");
+        throw std::logic_error("Matrix must be square");
 
     for (size_t i = 0; i < rows_; ++i) {
         for (size_t j = 0; j < cols_; ++j) 
@@ -1133,7 +1135,7 @@ void Matrix<T>::setIdentityMatrix() {
 template<typename T>
 void Matrix<T>::setDiagonalizable() {
     if (!isSquareMatrix())
-        throw std::error_condition("Matrix must be square");
+        throw std::logic_error("Matrix must be square");
 
     for (size_t i = 0; i < rows_; ++i) {
         for (size_t j = 0; j < cols_; ++j) {
@@ -1149,34 +1151,34 @@ void Matrix<T>::setDiagonalizable() {
 template <typename T>
 void Matrix<T>::setNormalMatrix() {
     if (!isSquareMatrix())
-        throw std::error_condition("Matrix must be square");
+        throw std::logic_error("Matrix must be square");
 
     Matrix<T> transpose = this->transposeMatrix();
     Matrix<T> identity = Matrix<T>::makeIdentityMatrix(rows_);
 
     if (*this * transpose != transpose * this || *this * identity != identity)
-        throw std::error_condition("Matrix is not normal");
+        throw std::logic_error("Matrix is not normal");
 }
 
 template<typename T>
 void Matrix<T>::setOrthogonalMatrix() {
     if (!isSquareMatrix())
-        throw std::error_condition("Matrix must be square");
+        throw std::logic_error("Matrix must be square");
 
     Matrix<T> transpose = this->transposeMatrix();
     Matrix<T> identity = Matrix<T>::makeIdentityMatrix(rows_);
 
     if ((*this * transpose != identity && *this * transpose != -identity) || (*this * identity != identity && *this * identity != -identity))
-        throw std::error_condition("Matrix is not orthogonal");
+        throw std::logic_error("Matrix is not orthogonal");
 }
 
 template<typename T>
-void Matrix<T>::setDiagonalMatrix(const T* diagonalArray) {
+void Matrix<T>::setDiagonalMatrix(const T* diagonalArray, const size_t diagonalArrayLength) {
     if (!isSquareMatrix())
-        throw std::error_condition("Matrix must be square");
+        throw std::logic_error("Matrix must be square");
 
-    if (diagonalArray == nullptr || sizeof(diagonalArray) / sizeof(*diagonalArray) != rows_)
-        throw std::error_argument("Len array must be equal with matrix rows number")
+    if (diagonalArray == nullptr || diagonalArrayLength != rows_)
+        throw std::logic_error("Len array must be equal with matrix rows number")
 
     for (size_t i = 0; i < rows_; ++i) {
         for (size_t j = 0; j < cols_; ++j) {
@@ -1187,12 +1189,12 @@ void Matrix<T>::setDiagonalMatrix(const T* diagonalArray) {
 
 // check
 template<typename T>
-void Matrix<T>::setUpperTriangularMatrix(const T* upperTriangularArray) {
+void Matrix<T>::setUpperTriangularMatrix(const T* upperTriangularArray, const size_t upperTriangularArrayLength) {
     if (!isSquareMatrix())
-        throw std::error_condition("Matrix must be square");
+        throw std::logic_error("Matrix must be square");
 
-    if (upperTriangularArray == nullptr || sizeof(upperTriangularArray) / sizeof(*upperTriangularArray) != rows_)
-        throw std::error_argument("Len array must be equal with matrix upper triangular elements number")
+    if (upperTriangularArray == nullptr || upperTriangularArrayLength != rows_)
+        throw std::logic_error("Len array must be equal with matrix upper triangular elements number")
 
     for (size_t i = 0; i < rows_; ++i) {
         for (size_t j = 0; j <= i; ++j) 
@@ -1202,12 +1204,12 @@ void Matrix<T>::setUpperTriangularMatrix(const T* upperTriangularArray) {
 
 //check
 template<typename T>
-void Matrix<T>::setLowerTriangularMatrix(const T* lowerTriangularArray) {
+void Matrix<T>::setLowerTriangularMatrix(const T* lowerTriangularArray, const size_t lowerTriangularArrayLength) {
     if (!isSquareMatrix())
-        throw std::error_condition("Matrix must be square");
+        throw std::logic_error("Matrix must be square");
 
-    if (lowerTriangularArray == nullptr || sizeof(lowerTriangularArray) / sizeof(*lowerTriangularArray) != rows_)
-        throw std::error_argument("Len array must be equal with matrix lower triangular elements number")
+    if (lowerTriangularArray == nullptr || lowerTriangularArrayLength != rows_)
+        throw std::logic_error("Len array must be equal with matrix lower triangular elements number")
 
     for (size_t i = 0; i < rows_; ++i) {
         for (size_t j = i; j < cols_; ++j) 
@@ -1216,9 +1218,26 @@ void Matrix<T>::setLowerTriangularMatrix(const T* lowerTriangularArray) {
 }
 
 template<typename T>
+void Matrix<T>::setTriangularMatrix(const T* diagonalArray, const size_t diagonalArrayLength, bool isUpper = true) {
+    if (!isSquareMatrix())
+        throw std::logic_error("Matrix must be square");
+
+    if (diagonalArray == nullptr || diagonalArrayLength != rows_)
+        throw std::logic_error("Len array must be equal with matrix diagonal elements number")
+
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j < cols_; ++j) {
+            if (i == j) data_[i][j] = diagonalArray[i];
+
+            else data_[i][j] = static_cast<T>(0);
+        }
+    }
+}
+
+template<typename T>
 void Matrix<T>::setTriangularMatrix(const T value, bool isUpper = true) {
     if (!isSquareMatrix())
-        throw std::error_condition("Matrix must be square");
+        throw std::logic_error("Matrix must be square");
 
     for (size_t i = 0; i < rows_; ++i) {
         for (size_t j = 0; j < cols_; ++j) {
@@ -1295,7 +1314,7 @@ Matrix<T> Matrix<T>::transposeMatrix(const Matrix<T>& other) const {
 template<typename T>
 T Matrix<T>::determinant() const {
     if (!isSquareMatrix())
-        throw std::error_condition("Matrix must be square");
+        throw std::logic_error("Matrix must be square");
 
     if (rows_ == 1)
         return data_[0][0];
@@ -1324,7 +1343,7 @@ T Matrix<T>::determinant() const {
 
 template<typename T>
 Matrix<T> Matrix<T>::cofactorMatrix() const {
-    if (!isSquareMatrix()) throw std::error_condition("Matrix must be square");
+    if (!isSquareMatrix()) throw std::logic_error("Matrix must be square");
 
     Matrix<T> cofactor(rows_, cols_);
 
@@ -1354,7 +1373,7 @@ Matrix<T> Matrix<T>::adjugateMatrix() const {
 
 template<typename T>
 Matrix<T> Matrix<T>::inverseMatrix() const {
-    if (!isSquareMatrix()) throw std::error_condition("Matrix must be square");
+    if (!isSquareMatrix()) throw std::logic_error("Matrix must be square");
 
     T determinant = this->determinant();
 
@@ -1367,7 +1386,7 @@ Matrix<T> Matrix<T>::inverseMatrix() const {
 
 template<typename T>
 Matrix<T> Matrix<T>::inverseMatrix(const Matrix& other) const {
-    if (!other.isSquareMatrix()) throw std::error_condition("Matrix must be square");
+    if (!other.isSquareMatrix()) throw std::logic_error("Matrix must be square");
 
     T determinant = other.determinant();
 
