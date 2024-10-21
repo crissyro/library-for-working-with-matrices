@@ -99,7 +99,7 @@ TEST(MatrixTest, StreamOutput) {
     mat(1, 1) = 4;
     std::ostringstream oss;
     oss << mat;
-    EXPECT_EQ(oss.str(), "1 2 \n3 4 \n");
+    EXPECT_EQ(oss.str(), "1 2\n3 4\n");
 }
 
 // Тест на оператор ввода

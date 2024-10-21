@@ -916,11 +916,15 @@ inline Matrix<T>& Matrix<T>::operator*=(const T scalar) {
 template<typename U>
 std::ostream& operator<<(std::ostream& os, const Matrix<U>& matrix) {
     for (size_t i = 0; i < matrix.rows_; ++i) {
-        for (size_t j = 0; j < matrix.cols_; ++j) 
-            os << matrix.data_[i][j] << " ";
+        for (size_t j = 0; j < matrix.cols_; ++j) {
+            os << matrix.data_[i][j];
+
+            if (j < matrix.cols_ - 1) os << " ";
+        }
+
         os << std::endl;
     }
-
+    
     return os;
 }
 
@@ -1175,13 +1179,16 @@ void Matrix<T>::setTriangularMatrix(const T value, bool isUpper) {
 template<typename T>
 void Matrix<T>::printMatrix() const {
     for (size_t i = 0; i < rows_; ++i) {
-        for (size_t j = 0; j < cols_; ++j) 
-            std::cout << data_[i][j] << " ";
-        
+        for (size_t j = 0; j < cols_; ++j) {
+            std::cout << data_[i][j];
+
+            if (j < cols_ - 1) std::cout << " ";
+        }
+
         std::cout << std::endl;
     }
 
-    std::cout << std::endl;
+    std::cout << std::endl; 
 }
 
 template<typename T>
