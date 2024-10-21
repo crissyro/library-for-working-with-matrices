@@ -322,7 +322,7 @@ public:
      * @tparam T Тип элементов матрицы.
      * @return true, если матрица симметричная, иначе false.
      */
-    bool isSymetricMatrix() const noexcept;
+    bool isSymmetricMatrix() const noexcept;
 
     /**
      * @brief Проверяет, является ли матрица единичной.
@@ -924,7 +924,7 @@ std::ostream& operator<<(std::ostream& os, const Matrix<U>& matrix) {
 
         os << std::endl;
     }
-    
+
     return os;
 }
 
@@ -949,7 +949,7 @@ inline bool Matrix<T>::isSquareMatrix() const noexcept {
 } 
 
 template<typename T>
-bool Matrix<T>::isSymetricMatrix() const noexcept {
+bool Matrix<T>::isSymmetricMatrix() const noexcept {
     if (!isSquareMatrix()) return false;
 
     for (size_t i = 0; i < rows_; ++i) {
@@ -1296,7 +1296,10 @@ Matrix<T> Matrix<T>::cofactorMatrix() const {
 
 template<typename T>
 Matrix<T> Matrix<T>::adjugateMatrix() const {
-    return this->cofactorMatrix().transposeMatrix();
+    Matrix<T> result = this->cofactorMatrix();
+    result.transposeMatrix();
+
+    return result;
 }
 
 template<typename T>
