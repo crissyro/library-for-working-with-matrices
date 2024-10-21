@@ -499,35 +499,6 @@ public:
     void setDiagonalMatrix(const T* diagonalArray, const size_t diagonalArrayLength);
 
     /**
-     * @brief Устанавливает текущую матрицу как верхнетреугольную.
-     * 
-     * Устанавливает все элементы ниже главной диагонали в ноль.
-     * 
-     * @tparam T Тип элементов матрицы.
-     */
-    void setUpperTriangularMatrix(const T* upperTriangularArray, const size_t upperTriangularArrayLength);
-
-    /**
-     * @brief Устанавливает текущую матрицу как нижнетреугольную.
-     * 
-     * Устанавливает все элементы выше главной диагонали в ноль.
-     * 
-     * @tparam T Тип элементов матрицы.
-     */
-    void setLowerTriangularMatrix(const T* lowerTriangularArray, const size_t lowerTriangularArrayLength);
-
-    /**
-     * @brief Устанавливает текущую матрицу как треугольную матрицу.
-     * 
-     * Использует массив для заполнения диагональных элементов матрицы и устанавливает все остальные элементы выше или ниже диагонали в ноль в зависимости от параметра `isUpper`.
-     * 
-     * @tparam T Тип элементов матрицы.
-     * @param diagonalArray Массив элементов для главной диагонали.
-     * @param isUpper Если true, создаётся верхнетреугольная матрица, иначе — нижнетреугольная.
-     */
-    void setTriangularMatrix(const T* diagonalArray, const size_t diagonalArrayLength, bool isUpper = true);
-
-    /**
      * @brief Преобразует текущую матрицу в ортогональную, используя другую матрицу.
      * 
      * Матрица приводится к ортогональной форме на основе переданной матрицы.
@@ -760,8 +731,6 @@ public:
 
 template<typename T>
 void Matrix<T>::initMatrix() noexcept {
-    if (rows_ < 0 || cols_ < 0) throw std::invalid_argument("Matrix must be non negative or zero"); 
-
     data_ = std::make_unique<std::unique_ptr<T[]>[]>(rows_);
     for (size_t i = 0; i < rows_; ++i) {
         data_[i] = std::make_unique<T[]>(cols_);
@@ -1182,53 +1151,6 @@ void Matrix<T>::setDiagonalMatrix(const T* diagonalArray, const size_t diagonalA
     for (size_t i = 0; i < rows_; ++i) {
         for (size_t j = 0; j < cols_; ++j) {
             data_[i][j] = (i == j)? diagonalArray[i] : static_cast<T>(0);
-        }
-    }
-}
-
-// check
-template<typename T>
-void Matrix<T>::setUpperTriangularMatrix(const T* upperTriangularArray, const size_t upperTriangularArrayLength) {
-    if (!isSquareMatrix())
-        throw std::logic_error("Matrix must be square");
-
-    if (upperTriangularArray == nullptr || upperTriangularArrayLength != rows_)
-        throw std::logic_error("Len array must be equal with matrix upper triangular elements number");
-
-    for (size_t i = 0; i < rows_; ++i) {
-        for (size_t j = i; j < cols_; ++j) 
-            data_[i][j] = upperTriangularArray[i * (i + 1) / 2 + j];
-    }
-}
-
-//check
-template<typename T>
-void Matrix<T>::setLowerTriangularMatrix(const T* lowerTriangularArray, const size_t lowerTriangularArrayLength) {
-    if (!isSquareMatrix())
-        throw std::logic_error("Matrix must be square");
-
-    if (lowerTriangularArray == nullptr || lowerTriangularArrayLength != rows_)
-        throw std::logic_error("Len array must be equal with matrix lower triangular elements number");
-    
-    for (size_t i = 0; i < rows_; ++i) {
-        for (size_t j = 0; j <= i; ++j) 
-            data_[i][j] = lowerTriangularArray[i * (i + 1) / 2 + j];
-    }
-}
-
-template<typename T>
-void Matrix<T>::setTriangularMatrix(const T* diagonalArray, const size_t diagonalArrayLength, bool isUpper) {
-    if (!isSquareMatrix())
-        throw std::logic_error("Matrix must be square");
-
-    if (diagonalArray == nullptr || diagonalArrayLength != rows_)
-        throw std::logic_error("Len array must be equal with matrix diagonal elements number");
-
-    for (size_t i = 0; i < rows_; ++i) {
-        for (size_t j = 0; j < cols_; ++j) {
-            if (i == j) data_[i][j] = diagonalArray[i];
-
-            else data_[i][j] = static_cast<T>(0);
         }
     }
 }
