@@ -1280,13 +1280,15 @@ Matrix<T> Matrix<T>::cofactorMatrix() const {
     for (size_t i = 0; i < rows_; i++) {
         for (size_t j = 0; j < cols_; j++) {
             Matrix<T> minor(rows_ - 1, cols_ - 1);
-            for (size_t m = 0; m < rows_ - 1; m++) {
-                size_t minorIndex = 0;
-                for (size_t n = 0; n < cols_; n++) {
+            for (size_t m = 0, minorRow = 0; m < rows_; m++) {
+                if (m == i) continue;
+                for (size_t n = 0, minorCol = 0; n < cols_; n++) {
                     if (n == j) continue;
 
-                    minor(m, minorIndex++) = data_[m + 1][n];
+                    minor(minorRow, minorCol++) = data_[m][n];
                 }
+
+                minorRow++;
             }
 
             cofactor(i, j) = ((i + j) % 2 == 0) ? minor.determinant() : -minor.determinant();

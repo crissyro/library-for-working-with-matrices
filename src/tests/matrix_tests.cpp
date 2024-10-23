@@ -230,30 +230,36 @@ TEST(MatrixTest, Determinant) {
 
 }
 
-// TEST(MatrixTest, InverseMatrix) {
-//     Matrix<int> mat(2, 2);
-//     mat(0, 0) = 4; mat(0, 1) = 7;
-//     mat(1, 0) = 2; mat(1, 1) = 6;
-//     Matrix<int> inv = mat.inverseMatrix();
-//     EXPECT_DOUBLE_EQ(inv(0, 0), 0.6);
-//     EXPECT_DOUBLE_EQ(inv(0, 1), -0.7);
-//     EXPECT_DOUBLE_EQ(inv(1, 0), -0.2);
-//     EXPECT_DOUBLE_EQ(inv(1, 1), 0.4);
-// }
+TEST(MatrixTest, InverseMatrix) {
+    Matrix<double> mat(2, 2);
+    mat(0, 0) = 4.0; mat(0, 1) = 7.0;
+    mat(1, 0) = 2.0; mat(1, 1) = 6.0;
 
-// TEST(MatrixTest, CofactorMatrix) {
-//     Matrix<int> mat(3, 3);
-//     mat(0, 0) = 1; mat(0, 1) = 2; mat(0, 2) = 3;
-//     mat(1, 0) = 0; mat(1, 1) = 1; mat(1, 2) = 4;
-//     mat(2, 0) = 5; mat(2, 1) = 6; mat(2, 2) = 0;
-//     Matrix<int> cofactor = mat.cofactorMatrix();
-//     EXPECT_EQ(cofactor(0, 0), 6);
-//     EXPECT_EQ(cofactor(0, 1), -15);
-//     EXPECT_EQ(cofactor(0, 2), 4);
-//     EXPECT_EQ(cofactor(1, 0), -3);
-//     EXPECT_EQ(cofactor(1, 1), 15);
-//     EXPECT_EQ(cofactor(1, 2), -1);
-// }
+    Matrix<double> inv = mat.inverseMatrix();
+
+    EXPECT_DOUBLE_EQ(inv(0, 0), 0.6);
+    EXPECT_DOUBLE_EQ(inv(0, 1), -0.7);
+    EXPECT_DOUBLE_EQ(inv(1, 0), -0.2);
+    EXPECT_DOUBLE_EQ(inv(1, 1), 0.4);
+}
+
+TEST(MatrixTest, CofactorMatrix) {
+    Matrix<int> mat(3, 3);
+    mat(0, 0) = 1; mat(0, 1) = 2; mat(0, 2) = 3;
+    mat(1, 0) = 0; mat(1, 1) = 1; mat(1, 2) = 4;
+    mat(2, 0) = 5; mat(2, 1) = 6; mat(2, 2) = 0;
+
+    Matrix<int> cofactor = mat.cofactorMatrix();
+
+    EXPECT_EQ(cofactor(0, 0), -24);  
+    EXPECT_EQ(cofactor(0, 1), 20);   
+    EXPECT_EQ(cofactor(0, 2), -5);   
+    EXPECT_EQ(cofactor(1, 0), 18);   
+    EXPECT_EQ(cofactor(1, 1), -15);  
+    EXPECT_EQ(cofactor(2, 0), 5);    
+    EXPECT_EQ(cofactor(2, 1), -4);   
+    EXPECT_EQ(cofactor(2, 2), 1);  
+}
 
 // TEST(MatrixTest, AlgebraicComplement) {
 //     Matrix<int> mat(3, 3);
