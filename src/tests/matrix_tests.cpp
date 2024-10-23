@@ -179,18 +179,56 @@ TEST(MatrixTest, ExceptionCofactorZeroDeterminantMatrix) {
     EXPECT_THROW(mat.inverseMatrix(), std::runtime_error);
 }
 
-// TEST(MatrixTest, Determinant) {
-//     Matrix<int> mat(2, 2);
-//     mat(0, 0) = 1; mat(0, 1) = 2;
-//     mat(1, 0) = 3; mat(1, 1) = 4;
-//     EXPECT_EQ(mat.determinant(), -2);
+TEST(MatrixTest, Determinant) {
+    Matrix<int> mat(2, 2);
+    mat(0, 0) = 1; mat(0, 1) = 2;
+    mat(1, 0) = 3; mat(1, 1) = 4;
+    EXPECT_EQ(mat.determinant(), -2);
 
-//     Matrix<int> mat3(3, 3);
-//     mat3(0, 0) = 1; mat3(0, 1) = 2; mat3(0, 2) = 3;
-//     mat3(1, 0) = 0; mat3(1, 1) = 1; mat3(1, 2) = 4;
-//     mat3(2, 0) = 5; mat3(2, 1) = 6; mat3(2, 2) = 0;
-//     EXPECT_EQ(mat3.determinant(), 1);
-// }
+    Matrix<int> mat3(3, 3);
+    mat3(0, 0) = 1; mat3(0, 1) = 2; mat3(0, 2) = 3;
+    mat3(1, 0) = 2; mat3(1, 1) = 4; mat3(1, 2) = 6;
+    mat3(2, 0) = 3; mat3(2, 1) = 6; mat3(2, 2) = 9;
+    EXPECT_EQ(mat3.determinant(), 0);
+
+    Matrix<float> mat33(3, 3);
+    mat33(0, 0) = 1.0; mat33(0, 1) = 2.0; mat33(0, 2) = 3.0;
+    mat33(1, 0) = 2.0; mat33(1, 1) = 4.0; mat33(1, 2) = 6.0;
+    mat33(2, 0) = 3.0; mat33(2, 1) = 6.0; mat33(2, 2) = 9.0;
+    EXPECT_EQ(mat33.determinant(), 0.0);
+
+    int arr4[4][4] = {{3, 2, 1, 5}, {1, 0, 2, 3}, {4, 3, 2, 1}, {0, 1, 0, 2}};
+
+    Matrix<int> mat4(arr4);
+
+    EXPECT_EQ(mat4.determinant(), -37);
+
+    int arr5[5][5] = {
+        {1, 2, 3, 4, 5},
+        {5, 4, 3, 2, 1},
+        {1, 3, 5, 2, 4},
+        {4, 5, 2, 1, 3},
+        {2, 1, 4, 5, 3}
+    };
+
+    Matrix<int> mat5(arr5);
+
+    EXPECT_EQ(mat5.determinant(), 0);  
+    
+    int arr6[6][6] = {
+        {2, 3, 1, 5, 4, 6},
+        {1, 2, 5, 4, 3, 6},
+        {3, 5, 2, 1, 6, 4},
+        {6, 1, 4, 3, 5, 2},
+        {4, 6, 3, 2, 1, 5},
+        {5, 4, 6, 1, 2, 3}
+    };
+
+    Matrix<int> mat6(arr6);
+
+    EXPECT_EQ(mat6.determinant(), 819);  
+
+}
 
 // TEST(MatrixTest, InverseMatrix) {
 //     Matrix<int> mat(2, 2);

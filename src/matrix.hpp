@@ -91,11 +91,12 @@ public:
 
     /**
      * @brief Конструктор для создания матрицы на основе двумерного массива.
-     * @param rows Количество строк.
-     * @param cols Количество столбцов.
+     * @param N Количество строк.
+     * @param M Количество столбцов.
      * @param array Исходный двумерный массив.
      */
-    Matrix(const size_t rows, const size_t cols, T** array) noexcept;
+    template<const size_t N, const size_t M>
+    Matrix(T (&array)[N][M]) noexcept;
 
     /**
      * @brief Конструктор копирования.
@@ -778,10 +779,11 @@ inline Matrix<T>::Matrix(const size_t rows, const size_t cols) noexcept : rows_(
 }
 
 template<typename T>
-inline Matrix<T>::Matrix(const size_t rows, const size_t cols, T** array) noexcept : rows_(rows), cols_(cols) {
+template<const size_t N, const size_t M>
+inline Matrix<T>::Matrix(T (&array)[N][M]) noexcept : rows_(N), cols_(M) {
     initMatrix();
-    for (size_t i = 0; i < rows_; ++i) 
-        std::copy(array[i], array[i] + cols_, data_[i].get());
+    for (size_t i = 0; i < N; ++i) 
+        std::copy(array[i], array[i] + M, data_[i].get());
 }
 
 template<typename T>
@@ -1241,8 +1243,7 @@ Matrix<T> Matrix<T>::transposeMatrix(const Matrix<T>& other) const {
 
 template<typename T>
 T Matrix<T>::determinant() const {
-    if (!isSquareMatrix())
-        throw std::logic_error("Matrix must be square");
+    if (!isSquareMatrix()) throw std::logic_error("Matrix must be square");
 
     if (rows_ == 1)
         return data_[0][0];
@@ -1254,16 +1255,17 @@ T Matrix<T>::determinant() const {
 
     for (size_t i = 0; i < cols_; ++i) {
         Matrix<T> minor(rows_ - 1, cols_ - 1);
-        for (size_t j = 1; j < rows_; ++j) {
+        for (size_t j = 1; j < rows_; ++j) { 
             size_t minorIndex = 0;
             for (size_t k = 0; k < cols_; ++k) {
                 if (k == i) continue;
-
-                minor(j - 1, minorIndex++) = data_[j][i];
+                
+                minor(j - 1, minorIndex++) = data_[j][k];
             }
         }
-    
-        det += (i % 2 == 0)? data_[0][i] * minor.determinant() : -data_[0][i] * minor.determinant();
+
+        det += data_[0][i] * minor.determinant() * ((i % 2 == 0) ? 1 : -1);
+
     }
 
     return det;
