@@ -3,7 +3,7 @@ CFLAGS = -Wall -Wextra -Werror -std=c++17 -g
 GCOV_FLAGS = --coverage -fprofile-arcs -ftest-coverage
 GTEST_FLAGS = -lgtest -lgtest_main -pthread
 
-HEADERS = matrix.hpp
+HEADERS = matrix/matrix.hpp
 TEST_SRC = tests/matrix_tests.cpp
 TEST_OBJ = $(TEST_SRC:.cpp=.o)
 TEST_OBJ_COV = $(TEST_SRC:.cpp=.gcov.o)
