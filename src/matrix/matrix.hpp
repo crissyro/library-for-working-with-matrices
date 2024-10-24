@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <memory>
+#include <type_traits>
 
 #define MIN_SIZE_MATRIX 2
 
@@ -19,6 +20,7 @@ namespace matrix_lib {
  */
 template<typename T>
 class Matrix {
+    static_assert(std::is_arithmetic<T>::value, "Matrix can only accept arithmetic types (numbers).");
 
 private:
     size_t rows_;  /**< Количество строк в матрице. */
