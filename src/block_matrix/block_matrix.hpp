@@ -2,6 +2,7 @@
 
 #include "../matrix/matrix.hpp"
 
+#define MIN_COUNT_BLOCK 2
 
 namespace matrix_lib {
 
@@ -22,7 +23,7 @@ public:
     inline size_t getBlockRows() const noexcept { return blockRows_; }
     inline size_t getBlockCols() const noexcept { return blockCols_; }
 
-    inline Matrix<MatrixType>& getBlock(const size_t blockRow, const size_t blockCol) const;
+    Matrix& getBlock(const size_t blockRow, const size_t blockCol) const;
 
     BlockMatrix();
     BlockMatrix(size_t rows, size_t cols);
@@ -33,5 +34,13 @@ public:
     ~BlockMatrix() noexcept = default;
 
 };
+
+template<typename MatrixType>
+inline Matrix<MatrixType>& getBlock(const size_t blockRow, const size_t blockCol) {
+    if (blockRow >= blockRows_ || blockCol >=  blockCols_  || blockRow < MIN_COUNT_BLOCK || blockCol < MIN_COUNT_BLOCK)
+        throw std::out_of_range("Block index out of range");
+        
+    return data_[blockRow][blockCol];
+}
 
 }
