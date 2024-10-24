@@ -22,6 +22,8 @@ public:
     inline size_t getBlockRows() const noexcept { return blockRows_; }
     inline size_t getBlockCols() const noexcept { return blockCols_; }
 
+    inline Matrix<MatrixType>& getBlock(const size_t blockRow, const size_t blockCol) const;
+
     BlockMatrix();
     BlockMatrix(size_t rows, size_t cols);
     BlockMatrix(size_t rows, size_t cols, size_t blockRows, size_t blockCols);
