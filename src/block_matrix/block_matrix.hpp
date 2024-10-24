@@ -16,6 +16,11 @@ private:
     std::unique_ptr<std::unique_ptr<Matrix<MatrixType>[]>[]> data_;
 
 public:
+    inline size_t getRows() const noexcept { return rows_; }
+    inline size_t getCols() const noexcept { return cols_; }
+
+    inline size_t getBlockRows() const noexcept { return blockRows_; }
+    inline size_t getBlockCols() const noexcept { return blockCols_; }
 
 };
 
