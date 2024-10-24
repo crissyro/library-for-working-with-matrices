@@ -22,6 +22,14 @@ public:
     inline size_t getBlockRows() const noexcept { return blockRows_; }
     inline size_t getBlockCols() const noexcept { return blockCols_; }
 
+    BlockMatrix();
+    BlockMatrix(size_t rows, size_t cols);
+    BlockMatrix(size_t rows, size_t cols, size_t blockRows, size_t blockCols);
+    BlockMatrix(size_t rows, size_t cols, const Matrix<MatrixType>& matrix);
+    BlockMatrix(const BlockMatrix& other);
+    BlockMatrix(BlockMatrix&& other) noexcept;
+    ~BlockMatrix() noexcept = default;
+
 };
 
 }
