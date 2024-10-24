@@ -472,24 +472,6 @@ public:
     void setDiagonalizable();
 
     /**
-     * @brief Преобразует текущую матрицу в нормальную матрицу.
-     * 
-     * Нормальная матрица удовлетворяет условию коммутативности с транспонированной матрицей.
-     * 
-     * @tparam T Тип элементов матрицы.
-     */
-    void setNormalMatrix();
-
-    /**
-     * @brief Преобразует текущую матрицу в ортогональную.
-     * 
-     * Ортогональная матрица — это матрица, произведение которой на транспонированную матрицу даёт единичную матрицу.
-     * 
-     * @tparam T Тип элементов матрицы.
-     */
-    void setOrthogonalMatrix();
-
-    /**
      * @brief Устанавливает текущую матрицу как диагональную матрицу.
      * 
      * Использует массив диагональных элементов для заполнения главной диагонали матрицы.
@@ -498,46 +480,6 @@ public:
      * @param diagonalArray Массив элементов для главной диагонали.
      */
     void setDiagonalMatrix(const T* diagonalArray, const size_t diagonalArrayLength);
-
-    /**
-     * @brief Преобразует текущую матрицу в ортогональную, используя другую матрицу.
-     * 
-     * Матрица приводится к ортогональной форме на основе переданной матрицы.
-     * 
-     * @tparam T Тип элементов матрицы.
-     * @param other Другая матрица, используемая для преобразования в ортогональную форму.
-     */
-    void setOrthogonalMatrix(const Matrix& other);
-
-    /**
-     * @brief Устанавливает текущую матрицу как диагональную, используя одно значение для всех элементов диагонали.
-     * 
-     * Все элементы на главной диагонали будут равны переданному значению, остальные элементы будут нулями.
-     * 
-     * @tparam T Тип элементов матрицы.
-     * @param value Значение для всех диагональных элементов.
-     */
-    void setDiagonalMatrix(const T value);
-
-    /**
-     * @brief Устанавливает текущую матрицу как верхнетреугольную с заданным значением диагонали.
-     * 
-     * Устанавливает все элементы ниже главной диагонали в ноль и задаёт значение для диагональных элементов.
-     * 
-     * @tparam T Тип элементов матрицы.
-     * @param value Значение для всех диагональных элементов.
-     */
-    void setUpperTriangularMatrix(const T value);
-
-    /**
-     * @brief Устанавливает текущую матрицу как нижнетреугольную с заданным значением диагонали.
-     * 
-     * Устанавливает все элементы выше главной диагонали в ноль и задаёт значение для диагональных элементов.
-     * 
-     * @tparam T Тип элементов матрицы.
-     * @param value Значение для всех диагональных элементов.
-     */
-    void setLowerTriangularMatrix(const T value);
 
     /**
      * @brief Устанавливает текущую матрицу как треугольную с заданным значением диагонали.
@@ -664,15 +606,14 @@ public:
     void transposeMatrix();
 
     /**
-     * @brief Возвращает транспонированную копию другой матрицы.
+     * @brief Возвращает транспонированную матрицу текущей матрицы.
      * 
-     * Создаёт и возвращает новую матрицу, которая является транспонированной версией переданной матрицы.
+     * Создаёт и возвращает новую матрицу, которая является транспонированной версией текущей матрицы.
      * 
      * @tparam T Тип элементов матрицы.
-     * @param other Другая матрица для транспонирования.
      * @return Транспонированная версия матрицы.
      */
-    Matrix transposeMatrix(const Matrix& other) const;
+    Matrix transposeMatrix() const;
 
     /**
      * @brief Вычисляет детерминант матрицы.
@@ -942,7 +883,7 @@ std::istream& operator>>(std::istream& is, Matrix<U>& matrix) {
 
 template<typename T>
 inline bool Matrix<T>::isEqualMatrix(const Matrix& other) const noexcept {
-    return *this == *other;
+    return *this == other;
 }
 
 template<typename T>
@@ -991,7 +932,7 @@ template <typename T>
 bool Matrix<T>::isSingular() const noexcept {
     if (!isSquareMatrix()) return false;
 
-    T determinant = determinant();
+    T determinant = this->determinant();
 
     return determinant == static_cast<T>(0);
 }
@@ -1039,10 +980,11 @@ template<typename T>
 bool Matrix<T>::isOrthogonalMatrix() const {
     if (!isSquareMatrix()) return false;
 
-    Matrix<T> transpose = this->transpose();
-    Matrix<T> identity = Matrix<T>::identity(rows_);
+    Matrix<T> transpose = this->transposeMatrix();
+    Matrix<T> identity = Matrix<T>::makeIdentityMatrix(rows_);
 
-    return (*this * transpose == identity) || (transpose * this == identity);
+    return (*this) * transpose == transpose * (*this) && (*this) * identity == identity;
+
 }
 
 template<typename T>
@@ -1052,7 +994,7 @@ bool Matrix<T>::isNormalMatrix() const {
     Matrix<T> transpose = this->transposeMatrix();
     Matrix<T> identity = Matrix<T>::makeIdentityMatrix(rows_);
 
-    return (*this * transpose == transpose * this) && (*this * identity == identity);
+    return ((*this) * transpose == transpose * (*this)) && ((*this) * identity == identity);
 }
 
 template<typename T>
@@ -1120,30 +1062,6 @@ void Matrix<T>::setDiagonalizable() {
                 data_[i][j] = static_cast<T>(1);
         }
     }
-}
-
-template <typename T>
-void Matrix<T>::setNormalMatrix() {
-    if (!isSquareMatrix())
-        throw std::logic_error("Matrix must be square");
-
-    Matrix<T> transpose = this->transposeMatrix();
-    Matrix<T> identity = Matrix<T>::makeIdentityMatrix(rows_);
-
-    if (*this * transpose != transpose * this || *this * identity != identity)
-        throw std::logic_error("Matrix is not normal");
-}
-
-template<typename T>
-void Matrix<T>::setOrthogonalMatrix() {
-    if (!isSquareMatrix())
-        throw std::logic_error("Matrix must be square");
-
-    Matrix<T> transpose = this->transposeMatrix();
-    Matrix<T> identity = Matrix<T>::makeIdentityMatrix(rows_);
-
-    if ((*this * transpose != identity && *this * transpose != -identity) || (*this * identity != identity && *this * identity != -identity))
-        throw std::logic_error("Matrix is not orthogonal");
 }
 
 template<typename T>
@@ -1230,7 +1148,7 @@ void Matrix<T>::transposeMatrix() {
 }
 
 template<typename T>
-Matrix<T> Matrix<T>::transposeMatrix(const Matrix<T>& other) const {
+Matrix<T> Matrix<T>::transposeMatrix() const {
     Matrix<T> result(cols_, rows_);
 
     for (size_t i = 0; i < rows_; ++i) {

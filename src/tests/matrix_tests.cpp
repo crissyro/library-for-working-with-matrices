@@ -261,16 +261,25 @@ TEST(MatrixTest, CofactorMatrix) {
     EXPECT_EQ(cofactor(2, 2), 1);  
 }
 
-// TEST(MatrixTest, AlgebraicComplement) {
-//     Matrix<int> mat(3, 3);
-//     mat(0, 0) = 1; mat(0, 1) = 2; mat(0, 2) = 3;
-//     mat(1, 0) = 0; mat(1, 1) = 1; mat(1, 2) = 4;
-//     mat(2, 0) = 5; mat(2, 1) = 6; mat(2, 2) = 0;
-//     Matrix<int> algebraicComplement = mat.adjugateMatrix();
-//     EXPECT_EQ(algebraicComplement(0, 0), 6);
-//     EXPECT_EQ(algebraicComplement(0, 1), -15);
-//     EXPECT_EQ(algebraicComplement(0, 2), 4);
-// }
+TEST(MatrixTest, AlgebraicComplement) {
+    Matrix<int> mat(3, 3);
+    mat(0, 0) = 1; mat(0, 1) = 2; mat(0, 2) = 3;
+    mat(1, 0) = 0; mat(1, 1) = 1; mat(1, 2) = 4;
+    mat(2, 0) = 5; mat(2, 1) = 6; mat(2, 2) = 0;
+
+    Matrix<int> algebraicComplement = mat.adjugateMatrix();
+
+    EXPECT_EQ(algebraicComplement(0, 0), -24);
+    EXPECT_EQ(algebraicComplement(0, 1), 18);
+    EXPECT_EQ(algebraicComplement(0, 2), 5);
+    EXPECT_EQ(algebraicComplement(1, 0), 20);
+    EXPECT_EQ(algebraicComplement(1, 1), -15);
+    EXPECT_EQ(algebraicComplement(1, 2), -4);
+    EXPECT_EQ(algebraicComplement(2, 0), -5);
+    EXPECT_EQ(algebraicComplement(2, 1), 4);
+    EXPECT_EQ(algebraicComplement(2, 2), 1);
+}
+
 
 TEST(MatrixTest, PredicateCheck) {
     Matrix<int> mat(2, 2);
@@ -285,6 +294,60 @@ TEST(MatrixTest, PredicateCheck) {
     mat2(1, 0) = 0; mat2(1, 1) = 0;
 
     EXPECT_TRUE(mat2.isZeroMatrix());
+}
+
+TEST(MatrixTest, IsSymmetricMatrix) {
+    Matrix<int> mat(3, 3);
+    mat(0, 0) = 1; mat(0, 1) = 2; mat(0, 2) = 3;
+    mat(1, 0) = 2; mat(1, 1) = 4; mat(1, 2) = 5;
+    mat(2, 0) = 3; mat(2, 1) = 5; mat(2, 2) = 6;
+    EXPECT_TRUE(mat.isSymmetricMatrix());
+
+    mat(0, 1) = 0;
+    EXPECT_FALSE(mat.isSymmetricMatrix());
+}
+
+TEST(MatrixTest, IsIdentityMatrix) {
+    Matrix<int> identity = Matrix<int>().makeIdentityMatrix(3);
+    EXPECT_TRUE(identity.isIdentityMatrix());
+
+    identity(0, 0) = 0;
+    EXPECT_FALSE(identity.isIdentityMatrix());
+}
+
+TEST(MatrixTest, IsZeroMatrix) {
+    Matrix<int> zeroMat = Matrix<int>().makeZeroMatrix(3, 3);
+    EXPECT_TRUE(zeroMat.isZeroMatrix());
+
+    zeroMat(0, 0) = 1;
+    EXPECT_FALSE(zeroMat.isZeroMatrix());
+}
+
+TEST(MatrixTest, IsSingularMatrix) {
+    Matrix<int> singular(2, 2);
+    singular(0, 0) = 1; singular(0, 1) = 2;
+    singular(1, 0) = 2; singular(1, 1) = 4;
+    EXPECT_TRUE(singular.isSingular());
+
+    singular(1, 1) = 3;
+    EXPECT_FALSE(singular.isSingular());
+}
+
+TEST(MatrixTest, IsDiagonalMatrix) {
+    Matrix<int> diagonal(3, 3);
+    diagonal(0, 0) = 1; diagonal(1, 1) = 2; diagonal(2, 2) = 3;
+    EXPECT_TRUE(diagonal.isDiagonalMatrix());
+
+    diagonal(0, 1) = 1;
+    EXPECT_FALSE(diagonal.isDiagonalMatrix());
+}
+
+TEST(MatrixTest, IsOrthogonalMatrix) {
+    Matrix<int> ortho = Matrix<int>().makeIdentityMatrix(3);
+    EXPECT_TRUE(ortho.isOrthogonalMatrix());
+
+    ortho(0, 0) = 2;
+    EXPECT_FALSE(ortho.isOrthogonalMatrix());
 }
 
 }
