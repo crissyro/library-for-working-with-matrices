@@ -16,6 +16,10 @@ private:
     size_t blockCols_;
     std::unique_ptr<std::unique_ptr<Matrix<MatrixType>[]>[]> data_;
 
+    void initMemory();
+    void freeMemory();
+    void copy(const BlockMatrix& other);
+
 public:
     inline size_t getRows() const noexcept { return rows_; }
     inline size_t getCols() const noexcept { return cols_; }
@@ -34,6 +38,17 @@ public:
     ~BlockMatrix() noexcept = default;
 
 };
+
+template<typename MatrixType>
+void BlockMatrix<MatrixType>::initMemory() {
+    size_t numBlocksRow = (rows_ + blockRows_ - 1) / blockRows_;
+        size_t numBlocksCol = (cols_ + blockCols_ - 1) / blockCols_;
+        data_ = std::make_unique<std::unique_ptr<Matrix<MatrixType>[]>[]>(numBlocksRow);
+        for (size_t i = 0; i < numBlocksRow; ++i) 
+            data_[i] = std::make_unique<Matrix<MatrixType>[]>(numBlocksCol);
+        
+}
+
 
 template<typename MatrixType>
 inline Matrix<MatrixType>& getBlock(const size_t blockRow, const size_t blockCol) {
