@@ -49,6 +49,8 @@ void BlockMatrix<MatrixType>::initMemory() {
         
 }
 
+template<typename MatrixType>
+inline void BlockMatrix<MatrixType>::freeMemory() { data_.reset(); }
 
 template<typename MatrixType>
 inline Matrix<MatrixType>& getBlock(const size_t blockRow, const size_t blockCol) {
@@ -57,5 +59,6 @@ inline Matrix<MatrixType>& getBlock(const size_t blockRow, const size_t blockCol
         
     return data_[blockRow][blockCol];
 }
+
 
 }
