@@ -1,8 +1,13 @@
 #pragma once
 
 #include "../matrix/matrix.hpp"
+#include <limits>
 
 #define MIN_COUNT_BLOCK 2
+
+#define MIN_VALUE(T) (std::numeric_limits<T>::min())
+
+#define MAX_VALUE(T) (std::numeric_limits<T>::max())
 
 namespace matrix_lib {
 
@@ -65,8 +70,10 @@ public:
     double frobeniusNorm() const;
     size_t getBlockCount() const;
     BlockMatrix concat(const BlockMatrix& other, bool horizontal = true) const;
-
-
+    MatrixType findMaxElementBlockMamtrix() const noexcept;
+    BlockMatrix findMaxElementBlockMamtrixBlock() const noexcept;
+    MatrixType findMinElementBlockMatrix() const noexcept;
+    BlockMatrix findMinElementBlockMatrixBlock() const noexcept;
 };
 
 template<typename MatrixType>
@@ -396,6 +403,11 @@ double BlockMatrix<MatrixType>::frobeniusNorm() const {
 }
 
 template <typename MatrixType>
+size_t BlockMatrix<MatrixType>::getBlockCount() const {
+    return (rows_ + blockRows_ - 1) / blockRows_ * (cols_ + blockCols_ - 1) / blockCols_;
+}
+
+template <typename MatrixType>
 void BlockMatrix<MatrixType>::transposeBlockMatrix() {
     if (rows_ != cols_)
         throw std::invalid_argument("Only square block matrices can be transposed.");
@@ -443,5 +455,14 @@ BlockMatrix<MatrixType> BlockMatrix<MatrixType>::concat(const BlockMatrix<Matrix
         return result;
     }
 }
+
+template<typename MatrixType>
+MatrixType findMaxElementBlockMamtrix() const noexcept {
+    
+}
+
+// BlockMatrix findMaxElementBlockMamtrixBlock() const noexcept;
+// MatrixType findMinElementBlockMatrix() const noexcept;
+// BlockMatrix findMinElementBlockMatrixBlock() const noexcept;
 
 } // namespace
