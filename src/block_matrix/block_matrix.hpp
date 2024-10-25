@@ -504,6 +504,23 @@ Matrix<MatrixType> BlockMatrix<MatrixType>::findMaxElementBlockMamtrixBlock() co
 }
 
 
-// BlockMatrix findMinElementBlockMatrixBlock() const noexcept;
+template<typename MatrixType>
+Matrix<MatrixType> BlockMatrix<MatrixType>::findMinElementBlockMatrixBlock() const noexcept {
+    Matrix<MatrixType> res = data_[0][0];
+    MatrixType resMinElement = data_[0][0].findMinElement();
+
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j < cols_; ++j) {
+            Matrix<MatrixType> curBlock = data_[i][j];
+            MatrixType curMinElement = curBlock.findMinElement();
+            if (curMinElement < resMinElement) {
+                res = curBlock;
+                resMinElement = curMinElement;
+            }
+        }
+    }
+
+    return res;
+}
 
 } // namespace
