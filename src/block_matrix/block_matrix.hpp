@@ -196,9 +196,28 @@ inline BlockMatrix<MatrixType> BlockMatrix<MatrixType>::operator+(const BlockMat
     size_t numBlocksRow = (rows_ + blockRows_ - 1) / blockRows_;
     size_t numBlocksCol = (cols_ + blockCols_ - 1) / blockCols_;
 
-    for (size_t i = 0; i < numBlocksRow; ++i) 
+    for (size_t i = 0; i < numBlocksRow; ++i) {
         for (size_t j = 0; j < numBlocksCol; ++j) 
             result.data_[i][j] = data_[i][j] + other.data_[i][j];
+    }
+
+    return result;
+}
+
+template<typename MatrixType>
+inline BlockMatrix<MatrixType> BlockMatrix<MatrixType>::operator-(const BlockMatrix<MatrixType>& other) const {
+    if (rows_!= other.rows_ || cols_!= other.cols_)
+        throw std::invalid_argument("Matrices have different sizes");
+
+    BlockMatrix result(rows_, cols_, blockRows_, blockCols_);
+
+    size_t numBlocksRow = (rows_ + blockRows_ - 1) / blockRows_;
+    size_t numBlocksCol = (cols_ + blockCols_ - 1) / blockCols_;
+
+    for (size_t i = 0; i < numBlocksRow; ++i) {
+        for (size_t j = 0; j < numBlocksCol; ++j) 
+            result.data_[i][j] = data_[i][j] - other.data_[i][j];
+    }
 
     return result;
 }
