@@ -122,4 +122,9 @@ BlockMatrix<MatrixType>::BlockMatrix(size_t rows, size_t cols, const Matrix<Matr
         for (size_t j = 0; j < numBlocksCol; ++j) data_[i][j] = matrix.data_[i][j];
 }
 
+template<typename MatrixType>
+BlockMatrix<MatrixType>::BlockMatrix(const BlockMatrix<MatrixType>& other) : BlockMatrix() {
+    copy(other);
+}
+
 }
