@@ -470,6 +470,20 @@ MatrixType findMaxElementBlockMamtrix() noexcept {
     return maxElement;
 }
 
+template<typename MatrixType>
+MatrixType findMinElementBlockMatrix() noexcept {
+    MatrixType minElement = MAX_VALUE(MatrixType);
+
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j < cols_; ++j) {
+            MatrixType minInBlock = data_[i][j].findMinElement()
+            if (minInBlock < minElement) minElement = minInBlock;
+        }
+    }
+
+    return minElement;
+}
+
 // BlockMatrix findMaxElementBlockMamtrixBlock() const noexcept;
 // MatrixType findMinElementBlockMatrix() const noexcept;
 // BlockMatrix findMinElementBlockMatrixBlock() const noexcept;
