@@ -222,4 +222,27 @@ inline BlockMatrix<MatrixType> BlockMatrix<MatrixType>::operator-(const BlockMat
     return result;
 }
 
+template<typename MatrixType>
+inline BlockMatrix<MatrixType> BlockMatrix<MatrixType>::operator*(const BlockMatrix<MatrixType>& other) const {
+    if (cols_ != other.rows_)
+        throw std::invalid_argument("Matrix dimensions are incompatible for multiplication");
+
+    BlockMatrix result(rows_, other.cols_, blockRows_, other.blockCols_);
+
+    size_t numBlocksRowA = (rows_ + blockRows_ - 1) / blockRows_;
+    size_t numBlocksColA = (cols_ + blockCols_ - 1) / blockCols_;
+    size_t numBlocksColB = (other.cols_ + other.blockCols_ - 1) / other.blockCols_;
+
+    for (size_t i = 0; i < numBlocksRowA; ++i) {
+        for (size_t j = 0; j < numBlocksColB; ++j) {
+            for (size_t k = 0; k < numBlocksColA; ++k) {
+                result.data_[i][j] += data_[i][k] * other.data_[k][j];
+            }
+        }
+    }
+
+    return result;
+}
+
+
 } // namespace
