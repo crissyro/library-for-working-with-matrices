@@ -53,6 +53,21 @@ TEST(MatrixTest, Addition) {
     EXPECT_EQ(result(0, 1), 8);
     EXPECT_EQ(result(1, 0), 10);
     EXPECT_EQ(result(1, 1), 12);
+
+    result += mat1;
+    EXPECT_EQ(result(0, 0), 7);
+    EXPECT_EQ(result(0, 1), 10);
+    EXPECT_EQ(result(1, 0), 13);
+    EXPECT_EQ(result(1, 1), 16);
+
+    result -= mat1;
+    EXPECT_EQ(result(0, 0), 6);
+    EXPECT_EQ(result(0, 1), 8);
+    EXPECT_EQ(result(1, 0), 10);
+    EXPECT_EQ(result(1, 1), 12);
+
+    result *= 0;
+    EXPECT_TRUE(result.isZeroMatrix());
 }
 
 TEST(MatrixTest, Multiplication) {

@@ -44,10 +44,16 @@ public:
     BlockMatrix operator-(const BlockMatrix& other) const;
     BlockMatrix operator*(const BlockMatrix& other) const;
     BlockMatrix operator*(const MatrixType& scalar) const;
+    BlockMatrix& operator+=(const BlockMatrix& other);
+    BlockMatrix& operator-=(const BlockMatrix& other);
+    BlockMatrix& operator*=(const BlockMatrix& other);
+    BlockMatrix& operator*=(const MatrixType& scalar);
     bool operator==(const BlockMatrix& other) const;
     bool operator!=(const BlockMatrix& other) const;
 
     void printBlockMatrix() const;
+
+
 };
 
 template<typename MatrixType>
@@ -277,6 +283,30 @@ bool BlockMatrix<MatrixType>::operator==(const BlockMatrix<MatrixType>& other) c
 template<typename MatrixType>
 bool BlockMatrix<MatrixType>::operator!=(const BlockMatrix<MatrixType>& other) const {
     return !(*this == other);
+}
+
+template<typename MatrixType>
+inline BlockMatrix<MatrixType>& BlockMatrix<MatrixType>::operator+=(const BlockMatrix<MatrixType>& other) {
+    (*this) = (*this) + other;
+    return *this;
+}
+
+template<typename MatrixType>
+inline BlockMatrix<MatrixType>& BlockMatrix<MatrixType>::operator-=(const BlockMatrix<MatrixType>& other) {
+    (*this) = (*this) - other;
+    return *this;
+}
+
+template<typename MatrixType>
+inline BlockMatrix<MatrixType>& BlockMatrix<MatrixType>::operator*=(const BlockMatrix<MatrixType>& other) {
+    (*this) = (*this) * other;
+    return *this;
+}
+
+template<typename MatrixType>
+inline BlockMatrix<MatrixType>& BlockMatrix<MatrixType>::operator*=(const MatrixType& scalar) {
+    (*this) = (*this) * scalar;
+    return *this;
 }
 
 template<typename MatrixType>
