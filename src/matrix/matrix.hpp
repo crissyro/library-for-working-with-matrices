@@ -1265,7 +1265,7 @@ double Matrix<T>::frobeniusNorm() const {
 
     for (size_t i = 0; i < rows_; i++) {
         for (size_t j = 0; j < cols_; j++)
-            sum += static_cast<double>(data_[i][j]) * data_[i][j];
+            sum += std::pow(static_cast<double>(data_[i][j]), 2);
     }
 
     return std::sqrt(sum);
@@ -1273,6 +1273,8 @@ double Matrix<T>::frobeniusNorm() const {
 
 template<typename T>
 T Matrix<T>::findMaxElement() const {
+    if(isZeroMatrix()) return 0;
+
     T maxElement = data_[0][0];
 
     for (size_t i = 0; i < rows_; i++) {
@@ -1285,6 +1287,8 @@ T Matrix<T>::findMaxElement() const {
 
 template<typename T>
 T Matrix<T>::findMinElement() const {
+    if(isZeroMatrix()) return 0;
+
     T minElement = data_[0][0];
 
     for (size_t i = 0; i < rows_; i++) {
@@ -1297,6 +1301,8 @@ T Matrix<T>::findMinElement() const {
 
 template<typename T>
 T Matrix<T>::findSumElements() const {
+    if(isZeroMatrix()) return static_cast<T>(0);
+
     T sum = static_cast<T>(0);
 
     for (size_t i = 0; i < rows_; i++) 
@@ -1309,14 +1315,25 @@ template<typename T>
 Matrix<T> Matrix<T>::makeRandomMatrix(const size_t rows, const size_t cols, const T minValue, const T maxValue) const {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<T> dist(minValue, maxValue);
 
-    Matrix<T> res(rows_, cols);
+    Matrix<T> res(rows, cols);
+    
+    if constexpr (std::is_integral_v<T>) {
+        
+        std::uniform_int_distribution<T> dist(minValue, maxValue);
+        for (size_t i = 0; i < rows; ++i) 
+            for (size_t j = 0; j < cols; ++j) res.data_[i][j] = dist(gen);
+            
+    } else {
 
-    for (size_t i = 0; i < rows_; ++i) 
-        for (size_t j = 0; j < cols_; ++j) res.data_[i][j] = dist(gen);
+        std::uniform_real_distribution<double> dist(static_cast<double>(minValue), static_cast<double>(maxValue));
+        for (size_t i = 0; i < rows; ++i) 
+            for (size_t j = 0; j < cols; ++j) res.data_[i][j] = static_cast<T>(dist(gen));
+        
+    }
 
     return res;
 }
+
 
 } //matrix_lib
