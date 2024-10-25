@@ -385,6 +385,15 @@ bool BlockMatrix<MatrixType>::isSquare() const {
     return rows_ == cols_;
 }
 
+template<typename MatrixType>
+double BlockMatrix<MatrixType>::frobeniusNorm() const {
+    double sum = 0.0;
+
+    for (size_t i = 0; i < getBlockCount(); ++i) 
+        for (size_t j = 0; j < getBlockCount(); ++j) sum += data_[i][j].frobeniusNorm(); 
+        
+    return std::sqrt(sum);
+}
 
 template <typename MatrixType>
 void BlockMatrix<MatrixType>::transposeBlockMatrix() {
