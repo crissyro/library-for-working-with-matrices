@@ -77,4 +77,7 @@ T SparseMatrix<T>::getValue(const size_t row, const size_t col) const {
 template <typename T>
 bool SparseMatrix<T>::isZeroSparseMatrix() const { return values.empty(); }
 
+template <typename T>
+bool SparseMatrix<T>::isSquareSparseMatrix() const { return rows_ == cols_; }
+
 } // namespace matrix_lib
