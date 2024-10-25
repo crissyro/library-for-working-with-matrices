@@ -181,4 +181,10 @@ inline BlockMatrix<MatrixType>& BlockMatrix<MatrixType>::operator=(BlockMatrix<M
     return *this;
 }
 
+template<typename MatrixType>
+inline Matrix<MatrixType> BlockMatrix<MatrixType>::operator()(const size_t blockRow, const size_t blockCol) const {
+    return getBlock(blockRow, blockCol);
+}
+
+
 } // namespace
