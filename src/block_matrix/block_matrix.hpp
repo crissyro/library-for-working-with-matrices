@@ -279,4 +279,19 @@ bool BlockMatrix<MatrixType>::operator!=(const BlockMatrix<MatrixType>& other) c
     return !(*this == other);
 }
 
+template<typename MatrixType>
+void BlockMatrix<MatrixType>::printBlockMatrix() const {
+    size_t numBlocksRow = (rows_ + blockRows_ - 1) / blockRows_;
+    size_t numBlocksCol = (cols_ + blockCols_ - 1) / blockCols_;
+
+    for (size_t i = 0; i < numBlocksRow; ++i) {
+        for (size_t j = 0; j < numBlocksCol; ++j) {
+            std::cout << "Block (" << i << ", " << j << "):\n";
+            std::cout << data_[i][j] << "\n";  
+        }
+        std::cout << std::string(40, '-') << "\n";  
+    }
+}
+
+
 } // namespace
