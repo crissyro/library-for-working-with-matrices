@@ -104,6 +104,11 @@ BlockMatrix<MatrixType>::BlockMatrix(size_t rows, size_t cols) : rows_(rows), co
     initMemory();
 }
 
+template<typename MatrixType>
+BlockMatrix<MatrixType>::BlockMatrix(size_t rows, size_t cols, size_t blockRows, size_t blockCols) : \
+                               rows_(rows), cols_(cols), blockRows_(blockRows), blockCols_(blockCols) {
+    initMemory();
+}
 
 
 }
