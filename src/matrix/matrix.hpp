@@ -1283,9 +1283,28 @@ T Matrix<T>::findMaxElement() const {
     return maxElement;
 }
 
+template<typename T>
+T Matrix<T>::findMinElement() const {
+    T minElement = data_[0][0];
 
-// T findMinElement() const;
-// T findSumElements() const;
+    for (size_t i = 0; i < rows_; i++) {
+        for (size_t j = 0; j < cols_; j++) 
+            if (data_[i][j] < minElement) minElement = data_[i][j];
+    }
+
+    return minElement;
+}
+
+template<typename T>
+T Matrix<T>::findSumElements() const {
+    T sum = static_cast<T>(0);
+
+    for (size_t i = 0; i < rows_; i++) 
+        for (size_t j = 0; j < cols_; j++) sum += data_[i][j];
+
+    return sum;
+}
+
 // Matrix makeRandomMatrix(const size_t rows, const size_t cols, const T minValue, const T maxValue) const;
 
 } //matrix_lib
