@@ -17,12 +17,11 @@ private:
     size_t cols_;               // Количество столбцов
 
 public:
-    SparseMatrix();
-    SparseMatrix(size_t rows, size_t cols);
-    SparseMatrix(const std::vector<T>& values);
-    SparseMatrix(const SparseMatrix& other);
-    SparseMatrix(const SparseMatrix&& other);
-    ~SparseMatrix();
+    SparseMatrix() : rows_(0), cols_(0) {};
+    SparseMatrix(size_t rows, size_t cols) : rows_(rows), cols_(cols) {};
+    SparseMatrix(const SparseMatrix& other) = default;
+    SparseMatrix(const SparseMatrix&& other) noexcept = default;
+    ~SparseMatrix() = default;
 
     SparseMatrix& operator=(const SparseMatrix& other);
     SparseMatrix& operator=(SparseMatrix&& other) noexcept;
