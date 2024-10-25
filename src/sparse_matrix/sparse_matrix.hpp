@@ -23,12 +23,11 @@ public:
     SparseMatrix(const SparseMatrix&& other) noexcept = default;
     ~SparseMatrix() = default;
 
-    SparseMatrix& operator=(const SparseMatrix& other);
-    SparseMatrix& operator=(SparseMatrix&& other) noexcept;
-
     size_t getRows() const { return rows_; }
     size_t getCols() const { return cols_; }
 
+    SparseMatrix& operator=(const SparseMatrix& other);
+    SparseMatrix& operator=(SparseMatrix&& other) noexcept;
     SparseMatrix operator+(const SparseMatrix& other) const;
     SparseMatrix operator-(const SparseMatrix& other) const;
     SparseMatrix operator*(const SparseMatrix& other) const;
@@ -36,7 +35,6 @@ public:
     SparseMatrix& operator+=(const SparseMatrix& other);
     SparseMatrix& operator-=(const SparseMatrix& other);
     SparseMatrix& operator*=(const SparseMatrix& other);
-
     bool operator==(const SparseMatrix& other) const;
     bool operator!=(const SparseMatrix& other) const;
 
@@ -45,13 +43,25 @@ public:
     bool isIdentitySparseMatrix() const;
     bool isDiagonalSparseMatrix() const;
 
-    void addValue(int row, int col, T value);   // Добавить ненулевое значение
-    T getValue(int row, int col) const;         // Получить значение по индексу
+    void addValue(const size_t row, const size_t col, const T value);   // Добавить ненулевое значение
+    T getValue(const size_t row, const size_t col) const;         // Получить значение по индексу
     void print() const;                         // Вывести все ненулевые элементы
     size_t getNonZeroCount() const;             // Получить количество ненулевых элементов
     SparseMatrix<T> transpose() const;          // Транспонирование матрицы
 
 }; // class SparseMatrix
+
+template <typename T>
+void SparseMatrix<T>::addValue(const size_t row, const size_t col, const T value) {
+    if (row >= rows_ || col >= columns_)
+        throw std::out_of_range("Index out of range");
+    
+    if (value != static_cast<T>(0)) {
+        rowsIndexes.push_back(row);
+        colsIndexes.push_back(col);
+        values.push_back(value);
+    }
+}
 
 
 } // namespace matrix_lib
