@@ -75,6 +75,7 @@ public:
     MatrixType findMinElementBlockMatrix() const noexcept;
     Matrix<MatrixType> findMinElementBlockMatrixBlock() const noexcept;
     MatrixType dotProduct(const BlockMatrix& other) const;
+    BlockMatrix pow(int exp) const;
 };
 
 template<typename MatrixType>
@@ -389,9 +390,7 @@ bool BlockMatrix<MatrixType>::isSymmetric() const {
 }
 
 template <typename MatrixType>
-bool BlockMatrix<MatrixType>::isSquare() const {
-    return rows_ == cols_;
-}
+inline bool BlockMatrix<MatrixType>::isSquare() const { return rows_ == cols_; }
 
 template<typename MatrixType>
 double BlockMatrix<MatrixType>::frobeniusNorm() const {
@@ -404,7 +403,7 @@ double BlockMatrix<MatrixType>::frobeniusNorm() const {
 }
 
 template <typename MatrixType>
-size_t BlockMatrix<MatrixType>::getBlockCount() const {
+inline size_t BlockMatrix<MatrixType>::getBlockCount() const {
     return (rows_ + blockRows_ - 1) / blockRows_ * (cols_ + blockCols_ - 1) / blockCols_;
 }
 
@@ -531,6 +530,26 @@ MatrixType BlockMatrix<MatrixType>::dotProduct(const BlockMatrix<MatrixType>& ot
     for (size_t i = 0; i < getBlockRows(); ++i) 
         for (size_t j = 0; j < getBlockCols(); ++j) result += (this->getBlock(i, j) * other.getBlock(i, j)).findSumElements();
     
+    return result;
+}
+
+template <typename MatrixType>
+BlockMatrix<MatrixType> BlockMatrix<MatrixType>::pow(int exp) const {
+    if (!isSquare()) 
+        throw std::invalid_argument("Matrix must be square to raise to a power.");
+    
+    BlockMatrix<MatrixType> result(*this); 
+    BlockMatrix<MatrixType> base(*this);
+
+    if (exp == 0) {
+        result = BlockMatrix<MatrixType>(getRows(), getCols(), getBlockRows(), getBlockCols());
+        for (size_t i = 0; i < getBlockRows(); ++i) 
+            result.getBlock(i, i) = Matrix<MatrixType>::makeIdentityMatrix(getBlockRows());
+    } else {
+        for (int i = 1; i < exp; ++i) 
+            result = result * base;
+    }
+
     return result;
 }
 
