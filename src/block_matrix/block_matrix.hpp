@@ -96,8 +96,14 @@ template<typename MatrixType>
 BlockMatrix<MatrixType>::BlockMatrix() : rows_(MIN_SIZE_MATRIX), cols_(MIN_SIZE_MATRIX),\
                                blockRows_(MIN_COUNT_BLOCK), blockCols_(MIN_COUNT_BLOCK) {
     initMemory();
-
-
 }
+
+template<typename MatrixType>
+BlockMatrix<MatrixType>::BlockMatrix(size_t rows, size_t cols) : rows_(rows), cols_(cols),\
+                               blockRows_(MIN_COUNT_BLOCK), blockCols_(MIN_COUNT_BLOCK) {
+    initMemory();
+}
+
+
 
 }
