@@ -1305,6 +1305,18 @@ T Matrix<T>::findSumElements() const {
     return sum;
 }
 
-// Matrix makeRandomMatrix(const size_t rows, const size_t cols, const T minValue, const T maxValue) const;
+template<typename T>
+Matrix<T> Matrix<T>::makeRandomMatrix(const size_t rows, const size_t cols, const T minValue, const T maxValue) const {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<T> dist(minValue, maxValue);
+
+    Matrix<T> res(rows_, cols);
+
+    for (size_t i = 0; i < rows_; ++i) 
+        for (size_t j = 0; j < cols_; ++j) res.data_[i][j] = dist(gen);
+
+    return res;
+}
 
 } //matrix_lib
