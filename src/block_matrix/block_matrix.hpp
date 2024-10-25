@@ -53,7 +53,21 @@ public:
 
     void printBlockMatrix() const;
 
+    void sumBlockMatrix(const BlockMatrix& other);
 
+    void subBlockMatrix(const BlockMatrix& other);
+
+    void mulBlockMatrix(const BlockMatrix& other);
+
+    void mulBlockScalar(const MatrixType& scalar);
+
+    BlockMatrix sumBlockMatrix(const BlockMatrix& mat1, const BlockMatrix& mat2) const;
+
+    BlockMatrix subBlockMatrix(const BlockMatrix& mat1, const BlockMatrix& mat2) const;
+
+    BlockMatrix mulBlockMatrix(const BlockMatrix& mat1, const BlockMatrix& mat2) const;
+
+    BlockMatrix mulBlockScalar(const BlockMatrix& mat, const MatrixType& scalar) const;
 };
 
 template<typename MatrixType>
@@ -322,6 +336,18 @@ void BlockMatrix<MatrixType>::printBlockMatrix() const {
         std::cout << std::string(40, '-') << "\n";  
     }
 }
+
+template<typename MatrixType>
+inline void BlockMatrix<MatrixType>::sumBlockMatrix(const BlockMatrix<MatrixType>& other) { this += other; }
+
+template<typename MatrixType>
+inline void BlockMatrix<MatrixType>::subBlockMatrix(const BlockMatrix<MatrixType>& other) { this -= other; }
+
+template<typename MatrixType>
+inline void BlockMatrix<MatrixType>::mulBlockMatrix(const BlockMatrix<MatrixType>& other) { this *= other; }
+
+template<typename MatrixType>
+inline void BlockMatrix<MatrixType>::mulBlockScalar(const MatrixType& scalar) { this *= scalar; }
 
 
 } // namespace
