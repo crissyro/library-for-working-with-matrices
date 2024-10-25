@@ -80,4 +80,16 @@ bool SparseMatrix<T>::isZeroSparseMatrix() const { return values.empty(); }
 template <typename T>
 bool SparseMatrix<T>::isSquareSparseMatrix() const { return rows_ == cols_; }
 
+template <typename T>
+SparseMatrix<T> SparseMatrix<T>::transpose() const {
+    SparseMatrix result(cols_, rows_);
+
+    result.rowsIndexes = colsIndexes;
+    result.colsIndexes = rowsIndexes;
+    result.values = values;
+    
+    return result;
+}
+
+
 } // namespace matrix_lib
