@@ -8,6 +8,9 @@
 #include <iostream>
 #include <memory>
 #include <type_traits>
+#include <cmath>
+#include <algorithm>
+#include <random>
 
 #define MIN_SIZE_MATRIX 2
 
@@ -666,6 +669,12 @@ public:
      */
     Matrix inverseMatrix(const Matrix& other) const;
 
+    double frobeniusNorm() const;
+    T findMaxElement() const;
+    T findMinElement() const;
+    T findSumElements() const;
+    Matrix makeRandomMatrix(const size_t rows, const size_t cols, const T minValue, const T maxValue) const;
+
 }; // class Matrix;
 
 template<typename T>
@@ -1249,5 +1258,22 @@ Matrix<T> Matrix<T>::inverseMatrix(const Matrix& other) const {
     
     return adjugate * (1 / determinant);
 }
+
+template<typename T>
+double Matrix<T>::frobeniusNorm() const {
+    double sum = 0.0;
+
+    for (size_t i = 0; i < rows_; i++) {
+        for (size_t j = 0; j < cols_; j++)
+            sum += static_cast<double>(data_[i][j]) * data_[i][j];
+    }
+
+    return std::sqrt(sum);
+}
+
+// T findMaxElement() const;
+// T findMinElement() const;
+// T findSumElements() const;
+// Matrix makeRandomMatrix(const size_t rows, const size_t cols, const T minValue, const T maxValue) const;
 
 } //matrix_lib
