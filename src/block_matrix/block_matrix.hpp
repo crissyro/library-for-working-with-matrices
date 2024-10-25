@@ -388,5 +388,42 @@ void BlockMatrix<MatrixType>::transposeBlockMatrix() {
     }
 }
 
+template <typename MatrixType>
+BlockMatrix<MatrixType> BlockMatrix<MatrixType>::concat(const BlockMatrix<MatrixType>& other, bool horizontal) const {
+    if (horizontal) {
+        
+        if (rows_ != other.rows_)
+            throw std::invalid_argument("Row counts must match for horizontal concatenation.");
+
+        BlockMatrix result(rows_, cols_ + other.cols_, blockRows_, blockCols_);
+
+        for (size_t i = 0; i < rows_; ++i) {
+            for (size_t j = 0; j < cols_; ++j) 
+                result.data_[i][j] = data_[i][j];
+            
+            for (size_t j = 0; j < other.cols_; ++j) 
+                result.data_[i][j + cols_] = other.data_[i][j];
+        }
+
+        return result;
+        
+    } else {
+
+        if (cols_ != other.cols_)
+            throw std::invalid_argument("Column counts must match for vertical concatenation.");
+
+        BlockMatrix result(rows_ + other.rows_, cols_, blockRows_, blockCols_);
+
+        for (size_t i = 0; i < rows_; ++i) 
+            for (size_t j = 0; j < cols_; ++j) result.data_[i][j] = data_[i][j];
+            
+        
+        for (size_t i = 0; i < other.rows_; ++i) 
+            for (size_t j = 0; j < cols_; ++j) result.data_[i + rows_][j] = other.data_[i][j];
+            
+        
+        return result;
+    }
+}
 
 } // namespace
