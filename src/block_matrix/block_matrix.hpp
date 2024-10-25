@@ -110,5 +110,16 @@ BlockMatrix<MatrixType>::BlockMatrix(size_t rows, size_t cols, size_t blockRows,
     initMemory();
 }
 
+template<typename MatrixType>
+BlockMatrix<MatrixType>::BlockMatrix(size_t rows, size_t cols, const Matrix<MatrixType>& matrix) : \
+                               rows_(rows), cols_(cols), blockRows_(MIN_COUNT_BLOCK), blockCols_(MIN_COUNT_BLOCK) {
+    initMemory();
+    
+    size_t numBlocksRow = (rows_ + blockRows_ - 1) / blockRows_;
+    size_t numBlocksCol = (cols_ + blockCols_ - 1) / blockCols_;
+
+    for (size_t i = 0; i < numBlocksRow; ++i) 
+        for (size_t j = 0; j < numBlocksCol; ++j) data_[i][j] = matrix.data_[i][j];
+}
 
 }
