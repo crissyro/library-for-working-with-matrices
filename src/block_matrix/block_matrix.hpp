@@ -61,6 +61,9 @@ public:
     BlockMatrix mulBlockScalar(const BlockMatrix& mat, const MatrixType& scalar) const;
     void transposeBlockMatrix();
     bool isSymmetric() const;
+    bool isSquare() const;
+    double frobeniusNorm() const;
+    size_t getBlockCount() const;
     BlockMatrix concat(const BlockMatrix& other, bool horizontal = true) const;
 
 
@@ -378,6 +381,12 @@ bool BlockMatrix<MatrixType>::isSymmetric() const {
 }
 
 template <typename MatrixType>
+bool BlockMatrix<MatrixType>::isSquare() const {
+    return rows_ == cols_;
+}
+
+
+template <typename MatrixType>
 void BlockMatrix<MatrixType>::transposeBlockMatrix() {
     if (rows_ != cols_)
         throw std::invalid_argument("Only square block matrices can be transposed.");
@@ -391,7 +400,7 @@ void BlockMatrix<MatrixType>::transposeBlockMatrix() {
 template <typename MatrixType>
 BlockMatrix<MatrixType> BlockMatrix<MatrixType>::concat(const BlockMatrix<MatrixType>& other, bool horizontal) const {
     if (horizontal) {
-        
+
         if (rows_ != other.rows_)
             throw std::invalid_argument("Row counts must match for horizontal concatenation.");
 
