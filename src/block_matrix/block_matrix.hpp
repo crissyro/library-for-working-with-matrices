@@ -127,4 +127,10 @@ BlockMatrix<MatrixType>::BlockMatrix(const BlockMatrix<MatrixType>& other) : Blo
     copy(other);
 }
 
+template<typename MatrixType>
+BlockMatrix<MatrixType>::BlockMatrix(BlockMatrix<MatrixType>&& other) noexcept : \
+                                            rows_ = other.rows_, cols_ = other.cols_, \
+                                            blockRows_(other.blockRows_), blockCols_(other.blockCols_) \
+                                            data_(std::move(other.data_)) {
+    other.freeMemory();
 }
