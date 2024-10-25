@@ -37,6 +37,14 @@ public:
     BlockMatrix(BlockMatrix&& other) noexcept;
     ~BlockMatrix() noexcept = default;
 
+    BlockMatrix& operator=(const BlockMatrix& other);
+    BlockMatrix& operator=(BlockMatrix&& other) noexcept;
+    Matrix<MatrixType> operator()(const size_t blockRow, const size_t blockCol) const;
+    BlockMatrix operator+(const BlockMatrix& other) const;
+    BlockMatrix operator-(const BlockMatrix& other) const;
+    BlockMatrix operator*(const BlockMatrix& other) const;
+    bool operator==(const BlockMatrix& other) const;
+    BlockMatrix operator*(const MatrixType& scalar) const;
 };
 
 template<typename MatrixType>
@@ -144,6 +152,33 @@ inline BlockMatrix<MatrixType>::BlockMatrix(BlockMatrix<MatrixType>&& other) noe
       blockCols_(std::exchange(other.blockCols_, 0)),
       data_(std::move(other.data_)) {
     other.data_ = nullptr; 
+}
+
+template <typename MatrixType>
+inline BlockMatrix<MatrixType>& BlockMatrix<MatrixType>::operator=(const BlockMatrix<MatrixType>& other) {
+    if (this != &other) {
+        BlockMatrix temp(other);  
+        std::swap(*this, temp);   
+    }
+
+    return *this;
+}
+
+template<typename MatrixType>
+inline BlockMatrix<MatrixType>& BlockMatrix<MatrixType>::operator=(BlockMatrix<MatrixType>&& other) noexcept {
+    if (this != &other) {
+        freeMemory();
+
+        rows_ = std::exchange(other.rows_, 0);
+        cols_ = std::exchange(other.cols_, 0);
+        blockRows_ = std::exchange(other.blockRows_, 0);
+        blockCols_ = std::exchange(other.blockCols_, 0);
+        data_ = std::move(other.data_);
+
+        other.data_ = nullptr;
+    }
+
+    return *this;
 }
 
 } // namespace
