@@ -50,24 +50,23 @@ public:
     BlockMatrix& operator*=(const MatrixType& scalar);
     bool operator==(const BlockMatrix& other) const;
     bool operator!=(const BlockMatrix& other) const;
-
     void printBlockMatrix() const;
-
     void sumBlockMatrix(const BlockMatrix& other);
-
     void subBlockMatrix(const BlockMatrix& other);
-
     void mulBlockMatrix(const BlockMatrix& other);
-
     void mulBlockScalar(const MatrixType& scalar);
-
     BlockMatrix sumBlockMatrix(const BlockMatrix& mat1, const BlockMatrix& mat2) const;
-
     BlockMatrix subBlockMatrix(const BlockMatrix& mat1, const BlockMatrix& mat2) const;
-
     BlockMatrix mulBlockMatrix(const BlockMatrix& mat1, const BlockMatrix& mat2) const;
-
     BlockMatrix mulBlockScalar(const BlockMatrix& mat, const MatrixType& scalar) const;
+    void transposeBlockMatrix();
+    void randomFill(MatrixType minValue, MatrixType maxValue);
+    bool isSymmetric() const;
+    BlockMatrix concat(const BlockMatrix& other, bool horizontal = true) const;
+    MatrixType maxElement() const;
+    MatrixType minElement() const;
+
+
 };
 
 template<typename MatrixType>
@@ -367,6 +366,17 @@ inline BlockMatrix<MatrixType> BlockMatrix<MatrixType>::mulBlockMatrix(const Blo
 template<typename MatrixType>
 inline BlockMatrix<MatrixType> BlockMatrix<MatrixType>::mulBlockScalar(const BlockMatrix<MatrixType>& mat, const MatrixType& scalar) const {
     return mat * scalar;
+}
+
+template <typename MatrixType>
+void BlockMatrix<MatrixType>::transposeBlockMatrix() {
+    if (rows_ != cols_)
+        throw std::invalid_argument("Only square block matrices can be transposed.");
+
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = i + 1; j < cols_; ++j) 
+            std::swap(data_[i][j], data_[j][i]);
+    }
 }
 
 } // namespace
