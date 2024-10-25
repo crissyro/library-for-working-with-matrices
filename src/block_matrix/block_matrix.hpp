@@ -43,8 +43,8 @@ public:
     BlockMatrix operator+(const BlockMatrix& other) const;
     BlockMatrix operator-(const BlockMatrix& other) const;
     BlockMatrix operator*(const BlockMatrix& other) const;
-    bool operator==(const BlockMatrix& other) const;
     BlockMatrix operator*(const MatrixType& scalar) const;
+    bool operator==(const BlockMatrix& other) const;
 };
 
 template<typename MatrixType>
@@ -187,14 +187,11 @@ inline Matrix<MatrixType> BlockMatrix<MatrixType>::operator()(const size_t block
 }
 
 template<typename MatrixType>
-inline BlockMatrix<MatrixType> BlockMatrix<MatrixType>::operator+(const BlockMatrix<MatrixType>& other) const {
+BlockMatrix<MatrixType> BlockMatrix<MatrixType>::operator+(const BlockMatrix<MatrixType>& other) const {
     if (rows_!= other.rows_ || cols_!= other.cols_)
         throw std::invalid_argument("Matrices have different sizes");
 
-    BlockMatrix result(rows_, cols_, blockRows_, blockCols_);
-
-    size_t numBlocksRow = (rows_ + blockRows_ - 1) / blockRows_;
-    size_t numBlocksCol = (cols_ + blockCols_ - 1) / blockCols_;
+    BlockMatrix result(rows_, cols_, blockRows_, blockCols_);template<typename MatrixType>
 
     for (size_t i = 0; i < numBlocksRow; ++i) {
         for (size_t j = 0; j < numBlocksCol; ++j) 
@@ -205,7 +202,7 @@ inline BlockMatrix<MatrixType> BlockMatrix<MatrixType>::operator+(const BlockMat
 }
 
 template<typename MatrixType>
-inline BlockMatrix<MatrixType> BlockMatrix<MatrixType>::operator-(const BlockMatrix<MatrixType>& other) const {
+BlockMatrix<MatrixType> BlockMatrix<MatrixType>::operator-(const BlockMatrix<MatrixType>& other) const {
     if (rows_!= other.rows_ || cols_!= other.cols_)
         throw std::invalid_argument("Matrices have different sizes");
 
@@ -223,7 +220,7 @@ inline BlockMatrix<MatrixType> BlockMatrix<MatrixType>::operator-(const BlockMat
 }
 
 template<typename MatrixType>
-inline BlockMatrix<MatrixType> BlockMatrix<MatrixType>::operator*(const BlockMatrix<MatrixType>& other) const {
+BlockMatrix<MatrixType> BlockMatrix<MatrixType>::operator*(const BlockMatrix<MatrixType>& other) const {
     if (cols_ != other.rows_)
         throw std::invalid_argument("Matrix dimensions are incompatible for multiplication");
 
@@ -244,5 +241,19 @@ inline BlockMatrix<MatrixType> BlockMatrix<MatrixType>::operator*(const BlockMat
     return result;
 }
 
+template<typename MatrixType>
+Matrix<MatrixType> BlockMatrix<MatrixType>::operator*(const MatrixType& scalar) const {
+    BlockMatrix result(rows_, cols_, blockRows_, blockCols_);
+
+    size_t numBlocksRow = (rows_ + blockRows_ - 1) / blockRows_;
+    size_t numBlocksCol = (cols_ + blockCols_ - 1) / blockCols_;
+
+    for (size_t i = 0; i < numBlocksRow; ++i) {
+        for (size_t j = 0; j < numBlocksCol; ++j) 
+            result.data_[i][j] = scalar * data_[i][j];
+    }
+
+    return result;
+}
 
 } // namespace
