@@ -71,9 +71,10 @@ public:
     size_t getBlockCount() const;
     BlockMatrix concat(const BlockMatrix& other, bool horizontal = true) const;
     MatrixType findMaxElementBlockMamtrix() const noexcept;
-    Matrix<MatrixType> findMaxElementBlockMamtrixBlock() const noexcept;
+    Matrix<MatrixType> findMaxElementBlockMatrixBlock() const noexcept;
     MatrixType findMinElementBlockMatrix() const noexcept;
     Matrix<MatrixType> findMinElementBlockMatrixBlock() const noexcept;
+    MatrixType dotProduct(const BlockMatrix& other) const;
 };
 
 template<typename MatrixType>
@@ -485,7 +486,7 @@ MatrixType findMinElementBlockMatrix() noexcept {
 }
 
 template<typename MatrixType>
-Matrix<MatrixType> BlockMatrix<MatrixType>::findMaxElementBlockMamtrixBlock() const noexcept {
+Matrix<MatrixType> BlockMatrix<MatrixType>::findMaxElementBlockMatrixBlock() const noexcept {
     Matrix<MatrixType> res = data_[0][0];
     MatrixType resMaxElement = data_[0][0].findMaxElement();
 
@@ -522,5 +523,16 @@ Matrix<MatrixType> BlockMatrix<MatrixType>::findMinElementBlockMatrixBlock() con
 
     return res;
 }
+
+template <typename MatrixType>
+MatrixType BlockMatrix<MatrixType>::dotProduct(const BlockMatrix<MatrixType>& other) const {
+    MatrixType result = static_cast<MatrixType>(0);
+
+    for (size_t i = 0; i < getBlockRows(); ++i) 
+        for (size_t j = 0; j < getBlockCols(); ++j) result += (this->getBlock(i, j) * other.getBlock(i, j)).findSumElements();
+    
+    return result;
+}
+
 
 } // namespace
