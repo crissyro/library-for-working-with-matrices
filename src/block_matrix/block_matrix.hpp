@@ -60,11 +60,8 @@ public:
     BlockMatrix mulBlockMatrix(const BlockMatrix& mat1, const BlockMatrix& mat2) const;
     BlockMatrix mulBlockScalar(const BlockMatrix& mat, const MatrixType& scalar) const;
     void transposeBlockMatrix();
-    void randomFill(MatrixType minValue, MatrixType maxValue);
     bool isSymmetric() const;
     BlockMatrix concat(const BlockMatrix& other, bool horizontal = true) const;
-    MatrixType maxElement() const;
-    MatrixType minElement() const;
 
 
 };
@@ -369,6 +366,18 @@ inline BlockMatrix<MatrixType> BlockMatrix<MatrixType>::mulBlockScalar(const Blo
 }
 
 template <typename MatrixType>
+bool BlockMatrix<MatrixType>::isSymmetric() const {
+    if (rows_ != cols_) return false;
+
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = i + 1; j < cols_; ++j) 
+            if (data_[i][j] != data_[j][i]) return false;
+    }
+
+    return true;
+}
+
+template <typename MatrixType>
 void BlockMatrix<MatrixType>::transposeBlockMatrix() {
     if (rows_ != cols_)
         throw std::invalid_argument("Only square block matrices can be transposed.");
@@ -378,5 +387,6 @@ void BlockMatrix<MatrixType>::transposeBlockMatrix() {
             std::swap(data_[i][j], data_[j][i]);
     }
 }
+
 
 } // namespace
