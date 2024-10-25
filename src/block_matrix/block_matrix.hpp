@@ -71,9 +71,9 @@ public:
     size_t getBlockCount() const;
     BlockMatrix concat(const BlockMatrix& other, bool horizontal = true) const;
     MatrixType findMaxElementBlockMamtrix() const noexcept;
-    BlockMatrix findMaxElementBlockMamtrixBlock() const noexcept;
+    Matrix<MatrixType> findMaxElementBlockMamtrixBlock() const noexcept;
     MatrixType findMinElementBlockMatrix() const noexcept;
-    BlockMatrix findMinElementBlockMatrixBlock() const noexcept;
+    Matrix<MatrixType> findMinElementBlockMatrixBlock() const noexcept;
 };
 
 template<typename MatrixType>
@@ -484,8 +484,26 @@ MatrixType findMinElementBlockMatrix() noexcept {
     return minElement;
 }
 
-// BlockMatrix findMaxElementBlockMamtrixBlock() const noexcept;
-// MatrixType findMinElementBlockMatrix() const noexcept;
+template<typename MatrixType>
+Matrix<MatrixType> BlockMatrix<MatrixType>::findMaxElementBlockMamtrixBlock() const noexcept {
+    Matrix<MatrixType> res = data_[0][0];
+    MatrixType resMaxElement = data_[0][0].findMaxElement();
+
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j < cols_; ++j) {
+            Matrix<MatrixType> curBlock = data_[i][j];
+            MatrixType curMaxElement = curBlock.findMaxElement();
+            if (curMaxElement > resMaxElement) {
+                res = curBlock;
+                resMaxElement = curMaxElement;
+            }
+        }
+    }
+
+    return res;
+}
+
+
 // BlockMatrix findMinElementBlockMatrixBlock() const noexcept;
 
 } // namespace
