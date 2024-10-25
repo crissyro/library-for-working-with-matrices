@@ -1271,7 +1271,19 @@ double Matrix<T>::frobeniusNorm() const {
     return std::sqrt(sum);
 }
 
-// T findMaxElement() const;
+template<typename T>
+T Matrix<T>::findMaxElement() const {
+    T maxElement = data_[0][0];
+
+    for (size_t i = 0; i < rows_; i++) {
+        for (size_t j = 0; j < cols_; j++) 
+            if (data_[i][j] > maxElement) maxElement = data_[i][j];
+    }
+
+    return maxElement;
+}
+
+
 // T findMinElement() const;
 // T findSumElements() const;
 // Matrix makeRandomMatrix(const size_t rows, const size_t cols, const T minValue, const T maxValue) const;
