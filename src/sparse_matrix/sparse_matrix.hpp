@@ -31,7 +31,7 @@ public:
     SparseMatrix operator+(const SparseMatrix& other) const;
     SparseMatrix operator-(const SparseMatrix& other) const;
     SparseMatrix operator*(const SparseMatrix& other) const;
-    SparseMatrix operator*(T scalar) const;
+    SparseMatrix operator*(const T scalar) const;
     SparseMatrix& operator+=(const SparseMatrix& other);
     SparseMatrix& operator-=(const SparseMatrix& other);
     SparseMatrix& operator*=(const SparseMatrix& other);
@@ -50,6 +50,15 @@ public:
     SparseMatrix<T> transpose() const;          // Транспонирование матрицы
 
 }; // class SparseMatrix
+
+template <typename T>
+inline SparseMatrix<T> SparseMatrix<T>::operator*(const T scalar) const {
+    SparseMatrix result(*this);
+
+    for (T& element : result.values) element *= scalar;
+    
+    return result;
+}
 
 template <typename T>
 void SparseMatrix<T>::addValue(const size_t row, const size_t col, const T value) {
@@ -75,10 +84,10 @@ T SparseMatrix<T>::getValue(const size_t row, const size_t col) const {
 }
 
 template <typename T>
-bool SparseMatrix<T>::isZeroSparseMatrix() const { return values.empty(); }
+inline bool SparseMatrix<T>::isZeroSparseMatrix() const { return values.empty(); }
 
 template <typename T>
-bool SparseMatrix<T>::isSquareSparseMatrix() const { return rows_ == cols_; }
+inline bool SparseMatrix<T>::isSquareSparseMatrix() const { return rows_ == cols_; }
 
 template <typename T>
 SparseMatrix<T> SparseMatrix<T>::transpose() const {
@@ -87,7 +96,7 @@ SparseMatrix<T> SparseMatrix<T>::transpose() const {
     result.rowsIndexes = colsIndexes;
     result.colsIndexes = rowsIndexes;
     result.values = values;
-    
+
     return result;
 }
 
