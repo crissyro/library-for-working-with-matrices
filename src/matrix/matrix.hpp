@@ -669,10 +669,57 @@ public:
      */
     Matrix inverseMatrix(const Matrix& other) const;
 
+    /**
+     * @brief Вычисляет норму Фробениуса матрицы.
+     * 
+     * Норма Фробениуса — это квадратный корень из суммы квадратов всех элементов матрицы.
+     * 
+     * @return Значение нормы Фробениуса в виде `double`.
+     */
     double frobeniusNorm() const;
+
+    /**
+     * @brief Находит максимальный элемент в матрице.
+     * 
+     * Итерируется по всем элементам матрицы и возвращает наибольший из них.
+     * 
+     * @exception std::runtime_error Бросает исключение, если матрица пуста.
+     * @return Максимальный элемент матрицы типа `T`.
+     */
     T findMaxElement() const;
+
+    /**
+     * @brief Находит минимальный элемент в матрице.
+     * 
+     * Итерируется по всем элементам матрицы и возвращает наименьший из них.
+     * 
+     * @exception std::runtime_error Бросает исключение, если матрица пуста.
+     * @return Минимальный элемент матрицы типа `T`.
+     */
     T findMinElement() const;
+
+    /**
+     * @brief Вычисляет сумму всех элементов в матрице.
+     * 
+     * Подсчитывает сумму всех элементов в матрице. 
+     * Если матрица пуста, возвращает значение по умолчанию для типа `T`.
+     * 
+     * @return Сумма всех элементов матрицы типа `T`.
+     */
     T findSumElements() const;
+
+    /**
+     * @brief Создаёт случайно заполненную матрицу заданного размера.
+     * 
+     * Генерирует новую матрицу с элементами в диапазоне от `minValue` до `maxValue`.
+     * Для целых чисел используется равномерное целочисленное распределение, для чисел с плавающей точкой — равномерное распределение с плавающей точкой.
+     * 
+     * @param rows Количество строк в создаваемой матрице.
+     * @param cols Количество столбцов в создаваемой матрице.
+     * @param minValue Минимальное значение элементов матрицы.
+     * @param maxValue Максимальное значение элементов матрицы.
+     * @return Случайно заполненная матрица типа `Matrix<T>`.
+     */
     Matrix makeRandomMatrix(const size_t rows, const size_t cols, const T minValue, const T maxValue) const;
 
 }; // class Matrix;
@@ -1319,7 +1366,7 @@ Matrix<T> Matrix<T>::makeRandomMatrix(const size_t rows, const size_t cols, cons
     Matrix<T> res(rows, cols);
     
     if constexpr (std::is_integral_v<T>) {
-        
+
         std::uniform_int_distribution<T> dist(minValue, maxValue);
         for (size_t i = 0; i < rows; ++i) 
             for (size_t j = 0; j < cols; ++j) res.data_[i][j] = dist(gen);
