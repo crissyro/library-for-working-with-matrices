@@ -125,6 +125,18 @@ public:
     bool operator==(const Matrix& other) const;
 
     /**
+     * @brief Оператор сравнения матриц на неравенство.
+     * 
+     * Сравнивает текущую матрицу с другой матрицей на предмет неравенства.
+     * Матрицы считаются равными, если они имеют одинаковые размеры и все элементы совпадают.
+     * 
+     * @tparam T Тип элементов матрицы.
+     * @param other Другая матрица для сравнения.
+     * @return true, если матрицы не равны, иначе false.
+     */
+    bool operator!=(const Matrix& other) const;
+
+    /**
      * @brief Оператор сложения матриц.
      * 
      * Складывает текущую матрицу с другой матрицей и возвращает результат в виде новой матрицы.
@@ -744,6 +756,9 @@ bool Matrix<T>::operator==(const Matrix<T>& other) const {
 
     return true;
 }
+
+template<typename T>
+bool Matrix<T>::operator!=(const Matrix<T>& other) const { return !(*this == other); }
 
 template<typename T>
 Matrix<T> Matrix<T>::operator+(const Matrix<T>& other) const {

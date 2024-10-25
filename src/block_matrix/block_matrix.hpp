@@ -45,6 +45,9 @@ public:
     BlockMatrix operator*(const BlockMatrix& other) const;
     BlockMatrix operator*(const MatrixType& scalar) const;
     bool operator==(const BlockMatrix& other) const;
+    bool operator!=(const BlockMatrix& other) const;
+
+    void printBlockMatrix() const;
 };
 
 template<typename MatrixType>
@@ -269,6 +272,11 @@ bool BlockMatrix<MatrixType>::operator==(const BlockMatrix<MatrixType>& other) c
     }
 
     return true;
+}
+
+template<typename MatrixType>
+bool BlockMatrix<MatrixType>::operator!=(const BlockMatrix<MatrixType>& other) const {
+    return !(*this == other);
 }
 
 } // namespace
