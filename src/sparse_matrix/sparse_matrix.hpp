@@ -63,5 +63,16 @@ void SparseMatrix<T>::addValue(const size_t row, const size_t col, const T value
     }
 }
 
+template<typename T>
+T SparseMatrix<T>::getValue(const size_t row, const size_t col) const {
+    if (row >= rows_ || col >= cols_)
+        throw std::out_of_range("Index out of range");
+
+    for (size_t i = 0; i < values.size(); ++i) 
+        if (rowsIndexes[i] == row && colsIndexes[i] == col) return values[i];
+    
+    return static_cast<T>(0);
+}
+
 
 } // namespace matrix_lib
