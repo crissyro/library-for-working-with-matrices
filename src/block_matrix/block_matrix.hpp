@@ -349,5 +349,24 @@ inline void BlockMatrix<MatrixType>::mulBlockMatrix(const BlockMatrix<MatrixType
 template<typename MatrixType>
 inline void BlockMatrix<MatrixType>::mulBlockScalar(const MatrixType& scalar) { this *= scalar; }
 
+template<typename MatrixType>
+inline BlockMatrix<MatrixType> BlockMatrix<MatrixType>::sumBlockMatrix(const BlockMatrix<MatrixType>& mat1, const BlockMatrix<MatrixType>& mat2) const {
+    return mat1 + mat2;
+}
+
+template<typename MatrixType>
+inline BlockMatrix<MatrixType> BlockMatrix<MatrixType>::subBlockMatrix(const BlockMatrix<MatrixType>& mat1, const BlockMatrix<MatrixType>& mat2) const {
+    return mat1 - mat2;
+}
+
+template<typename MatrixType>
+inline BlockMatrix<MatrixType> BlockMatrix<MatrixType>::mulBlockMatrix(const BlockMatrix<MatrixType>& mat1, const BlockMatrix<MatrixType>& mat2) const {
+    return mat1 * mat2;
+}
+
+template<typename MatrixType>
+inline BlockMatrix<MatrixType> BlockMatrix<MatrixType>::mulBlockScalar(const BlockMatrix<MatrixType>& mat, const MatrixType& scalar) const {
+    return mat * scalar;
+}
 
 } // namespace
