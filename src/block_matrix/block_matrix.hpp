@@ -18,7 +18,7 @@ private:
 
     void initMemory();
     void freeMemory();
-    void copy(const BlockMatrix& other);
+    void copy(const BlockMatrix& other) noexcept;
 
 public:
     inline size_t getRows() const noexcept { return rows_; }
@@ -42,10 +42,15 @@ public:
 template<typename MatrixType>
 void BlockMatrix<MatrixType>::initMemory() {
     size_t numBlocksRow = (rows_ + blockRows_ - 1) / blockRows_;
-        size_t numBlocksCol = (cols_ + blockCols_ - 1) / blockCols_;
-        data_ = std::make_unique<std::unique_ptr<Matrix<MatrixType>[]>[]>(numBlocksRow);
-        for (size_t i = 0; i < numBlocksRow; ++i) 
-            data_[i] = std::make_unique<Matrix<MatrixType>[]>(numBlocksCol);
+    size_t numBlocksCol = (cols_ + blockCols_ - 1) / blockCols_;
+
+    data_ = std::make_unique<std::unique_ptr<Matrix<MatrixType>[]>[]>(numBlocksRow);
+
+    for (size_t i = 0; i < numBlocksRow; ++i) {
+        data_[i] = std::make_unique<Matrix<MatrixType>[]>(numBlocksCol);
+        for (size_t j = 0; j < numBlocksCol; ++j) 
+            data_[i][j] = Matrix<MatrixType>(blockRows_, blockCols_);     
+    }
         
 }
 
@@ -67,16 +72,32 @@ inline Matrix<MatrixType>& getBlock(const size_t blockRow, const size_t blockCol
 }
 
 template<typename MatrixType>
-void BlockMatrix<MatrixType>::copy(const BlockMatrix<MatrixType>& other) {
-    rows_ = other.rows_;
-    cols_ = other.cols_;
-    blockRows_ = other.blockRows_;
-    blockCols_ = other.blockCols_;
-    
+void BlockMatrix<MatrixType>::copy(const BlockMatrix<MatrixType>& other) noexcept {
+    if (this != &other) {
+        freeMemory();
+
+        rows_ = other.rows_;
+        cols_ = other.cols_;
+        blockRows_ = other.blockRows_;
+        blockCols_ = other.blockCols_;
+
+        initMemory();
+
+        size_t numBlocksRow = (rows_ + blockRows_ - 1) / blockRows_;
+        size_t numBlocksCol = (cols_ + blockCols_ - 1) / blockCols_;
+
+        for (size_t i = 0; i < numBlocksRow; ++i) 
+            for (size_t j = 0; j < numBlocksCol; ++j) data_[i][j] = other.data_[i][j];
+        
+    }
+}
+
+template<typename MatrixType>
+BlockMatrix<MatrixType>::BlockMatrix() : rows_(MIN_SIZE_MATRIX), cols_(MIN_SIZE_MATRIX),\
+                               blockRows_(MIN_COUNT_BLOCK), blockCols_(MIN_COUNT_BLOCK) {
     initMemory();
-    for (size_t i = 0; i < blockRows_; ++i)
-        for (size_t j = 0; j < blockCols_; ++j)
-            data_[i][j] = other.data_[i][j];
+
+
 }
 
 }
