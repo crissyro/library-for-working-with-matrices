@@ -457,8 +457,17 @@ BlockMatrix<MatrixType> BlockMatrix<MatrixType>::concat(const BlockMatrix<Matrix
 }
 
 template<typename MatrixType>
-MatrixType findMaxElementBlockMamtrix() const noexcept {
-    
+MatrixType findMaxElementBlockMamtrix() noexcept {
+    MatrixType maxElement = MIN_VALUE(MatrixType);
+
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j < cols_; ++j) {
+            MatrixType maxInBlock = data_[i][j].findMaxElement()
+            if (maxInBlock > maxElement) maxElement = maxInBlock;
+        }
+    }
+
+    return maxElement;
 }
 
 // BlockMatrix findMaxElementBlockMamtrixBlock() const noexcept;
