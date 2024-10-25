@@ -50,7 +50,13 @@ void BlockMatrix<MatrixType>::initMemory() {
 }
 
 template<typename MatrixType>
-inline void BlockMatrix<MatrixType>::freeMemory() { data_.reset(); }
+inline void BlockMatrix<MatrixType>::freeMemory() { 
+    data_.reset(); 
+    rows_ = 0;
+    cols_ = 0;
+    blockRows_ = 0;
+    blockCols_ = 0;
+}
 
 template<typename MatrixType>
 inline Matrix<MatrixType>& getBlock(const size_t blockRow, const size_t blockCol) {
@@ -60,5 +66,17 @@ inline Matrix<MatrixType>& getBlock(const size_t blockRow, const size_t blockCol
     return data_[blockRow][blockCol];
 }
 
+template<typename MatrixType>
+void BlockMatrix<MatrixType>::copy(const BlockMatrix<MatrixType>& other) {
+    rows_ = other.rows_;
+    cols_ = other.cols_;
+    blockRows_ = other.blockRows_;
+    blockCols_ = other.blockCols_;
+    
+    initMemory();
+    for (size_t i = 0; i < blockRows_; ++i)
+        for (size_t j = 0; j < blockCols_; ++j)
+            data_[i][j] = other.data_[i][j];
+}
 
 }
