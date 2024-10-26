@@ -108,5 +108,90 @@ SparseMatrix<T> SparseMatrix<T>::transpose() const {
     return result;
 }
 
+template <typename T>
+SparseMatrix<T> SparseMatrix<T>::operator+(const SparseMatrix& other) const {
+    if (rows_ != other.rows_ || cols_ != other.cols_) 
+        throw std::invalid_argument("Matrices have different dimensions");
+    
+    SparseMatrix result(rows_, cols_);
+
+    size_t i = 0;
+    size_t j = 0;
+
+    while (i < values.size() || j < other.values.size()) {
+        if (i < values.size() && (j >= other.values.size() || rowsIndexes[i] < other.rowsIndexes[j] ||
+            (rowsIndexes[i] == other.rowsIndexes[j] && colsIndexes[i] < other.colsIndexes[j]))) {
+            result.addValue(rowsIndexes[i], colsIndexes[i], values[i]);
+            ++i;
+        } else if (j < other.values.size() && (i >= values.size() || rowsIndexes[i] > other.rowsIndexes[j] ||
+            (rowsIndexes[i] == other.rowsIndexes[j] && colsIndexes[i] > other.colsIndexes[j]))) {
+            result.addValue(other.rowsIndexes[j], other.colsIndexes[j], other.values[j]);
+            ++j;
+        } else {
+            T sum = values[i] + other.values[j];
+            if (sum != T(0)) result.addValue(rowsIndexes[i], colsIndexes[i], sum); 
+
+            ++i;
+            ++j;
+        }
+    }
+
+    return result;
+}
+
+template <typename T>
+SparseMatrix<T> SparseMatrix<T>::operator-(const SparseMatrix& other) const {
+    if (rows_ != other.rows_ || cols_ != other.cols_) 
+        throw std::invalid_argument("Matrices have different dimensions");
+    
+
+    SparseMatrix result(rows_, cols_);
+
+    size_t i = 0;
+    size_t j = 0;
+
+    while (i < values.size() || j < other.values.size()) {
+        if (i < values.size() && (j >= other.values.size() || rowsIndexes[i] < other.rowsIndexes[j] ||
+            (rowsIndexes[i] == other.rowsIndexes[j] && colsIndexes[i] < other.colsIndexes[j]))) {
+            result.addValue(rowsIndexes[i], colsIndexes[i], values[i]);
+            ++i;
+        } else if (j < other.values.size() && (i >= values.size() || rowsIndexes[i] > other.rowsIndexes[j] ||
+            (rowsIndexes[i] == other.rowsIndexes[j] && colsIndexes[i] > other.colsIndexes[j]))) {
+            result.addValue(other.rowsIndexes[j], other.colsIndexes[j], -other.values[j]);
+            ++j;
+        } else {
+            T diff = values[i] - other.values[j];
+            if (diff != T(0)) result.addValue(rowsIndexes[i], colsIndexes[i], diff);
+    
+            ++i;
+            ++j;
+        }
+    }
+
+    return result;
+}
+
+template <typename T>
+SparseMatrix<T> SparseMatrix<T>::operator*(const SparseMatrix& other) const {
+    if (cols_ != other.rows_) 
+        throw std::invalid_argument("Matrices have incompatible dimensions for multiplication");
+    
+    SparseMatrix result(rows_, other.cols_);
+
+    for (size_t i = 0; i < values.size(); ++i) {
+        int row = rowsIndexes[i];
+        T value = values[i];
+
+        for (size_t j = 0; j < other.values.size(); ++j) {
+            if (other.rowsIndexes[j] == colsIndexes[i]) { 
+                int col = other.colsIndexes[j];
+                T product = value * other.values[j];
+                result.addValue(row, col, result.getValue(row, col) + product);
+            }
+        }
+    }
+    
+    return result;
+}
 
 } // namespace matrix_lib
