@@ -61,6 +61,7 @@ public:
     T minElementSparseMatrix() const;
     T sumRowSparseMatrix(int row) const;
     T sumColumnSparseMatrix(int col) const;
+    T totalSumSparseMatrix() const;
     T traceSparseMatrix() const;
     SparseMatrix minorSparseMatrix(size_t row, size_t col) const;
     T determinantSparseMatrix() const;
@@ -362,6 +363,14 @@ T SparseMatrix<T>::sumColumnSparseMatrix(int col) const {
     for (size_t i = 0; i < colsIndexes.size(); ++i) 
         if (colsIndexes[i] == col) sum += values[i];
         
+    return sum;
+}
+
+template <typename T>
+inline T SparseMatrix<T>::totalSumSparseMatrix() const {
+    T sum = static_cast<T>(0);
+    for (const T& value : values) sum += value;
+    
     return sum;
 }
 
