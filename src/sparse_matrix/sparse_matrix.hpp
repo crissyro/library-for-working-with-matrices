@@ -96,6 +96,12 @@ inline SparseMatrix<T>& SparseMatrix<T>::operator-=(const SparseMatrix& other) {
     return *this;
 }
 
+template<typename T>
+inline SparseMatrix<T>& SparseMatrix<T>::operator*=(const SparseMatrix& other) {
+    (*this) = (*this) * other;
+    return *this;
+}
+
 template <typename T>
 bool SparseMatrix<T>::operator!=(const SparseMatrix& other) const { return !(*this == other); }
 
