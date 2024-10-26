@@ -43,6 +43,7 @@ public:
     bool isSquareSparseMatrix() const;
     bool isIdentitySparseMatrix() const;
     bool isDiagonalSparseMatrix() const;
+    bool isEmptySparseMatrix() const;
 
     void addValue(const size_t row, const size_t col, const T value);   // Добавить ненулевое значение
     T getValue(const size_t row, const size_t col) const;         // Получить значение по индексу
@@ -50,6 +51,7 @@ public:
     size_t getNonZeroCount() const;             // Получить количество ненулевых элементов
     SparseMatrix<T> transpose() const;          // Транспонирование матрицы
     void scaleSparseMatrix(T scalar);
+    void fillDiagonalSparseMatrix(T value);
     std::pair<size_t, size_t> sizeSparseMatrix() const;
     double densitySparseMatrix() const;
     void clearSparseMatrix();
@@ -288,6 +290,9 @@ inline bool SparseMatrix<T>::isZeroSparseMatrix() const { return values.empty();
 template <typename T>
 inline bool SparseMatrix<T>::isSquareSparseMatrix() const { return rows_ == cols_; }
 
+template <typename T>
+inline bool SparseMatrix<T>::isEmptySparseMatrix() const { return values.empty(); }
+
 template<typename T>
 bool SparseMatrix<T>::isIdentitySparseMatrix() const {
     if (!isSquareSparseMatrix()) return false;
@@ -311,6 +316,14 @@ bool SparseMatrix<T>::isDiagonalSparseMatrix() const {
     }
 
     return true;
+}
+
+template <typename T>
+void SparseMatrix<T>::fillDiagonalSparseMatrix(T value) {
+    clearSparseMatrix();
+    size_t minDim = std::min(rows_, cols_);
+
+    for (size_t i = 0; i < minDim; ++i) addValue(i, i, value);
 }
 
 template <typename T>
