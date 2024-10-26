@@ -59,6 +59,8 @@ public:
     void clearSparseMatrix();
     T maxElementSparseMatrix() const;
     T minElementSparseMatrix() const;
+    T sumRowSparseMatrix(int row) const;
+    T sumColumnSparseMatrix(int col) const;
     T traceSparseMatrix() const;
     SparseMatrix minorSparseMatrix(size_t row, size_t col) const;
     T determinantSparseMatrix() const;
@@ -341,6 +343,26 @@ void SparseMatrix<T>::fillDiagonalSparseMatrix(T value) {
     size_t minDim = std::min(rows_, cols_);
 
     for (size_t i = 0; i < minDim; ++i) addValue(i, i, value);
+}
+
+template <typename T>
+T SparseMatrix<T>::sumRowSparseMatrix(int row) const {
+    T sum = static_cast<T>(0);
+
+    for (size_t i = 0; i < rowsIndexes.size(); ++i) 
+        if (rowsIndexes[i] == row) sum += values[i];
+        
+    return sum;
+}
+
+template <typename T>
+T SparseMatrix<T>::sumColumnSparseMatrix(int col) const {
+    T sum = static_cast<T>(0);
+
+    for (size_t i = 0; i < colsIndexes.size(); ++i) 
+        if (colsIndexes[i] == col) sum += values[i];
+        
+    return sum;
 }
 
 template <typename T>
