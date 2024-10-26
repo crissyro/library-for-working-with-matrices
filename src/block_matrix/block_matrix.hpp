@@ -59,13 +59,13 @@ public:
      * @brief Возвращает количество строк в блочной матрице.
      * @return Количество строк.
      */
-    inline size_t getRows() const noexcept { return rows_; }
+    inline size_t getRowsBlockMatrix() const noexcept { return rows_; }
 
     /**
      * @brief Возвращает количество столбцов в блочной матрице.
      * @return Количество столбцов.
      */
-    inline size_t getCols() const noexcept { return cols_; }
+    inline size_t getColsBlockMatrix() const noexcept { return cols_; }
 
     /**
      * @brief Возвращает количество строк в блоке матрицы.
@@ -372,7 +372,7 @@ public:
      * 
      * Метод проверяет, является ли текущая блочная матрица квадратной.
      */
-    bool isSquare() const;
+    bool isSquareBlockMatrix() const;
 
     /**
      * @brief Вычисление нормы Фробениуса блочной матрицы.
@@ -455,7 +455,7 @@ public:
      * Метод возводит текущую блочную матрицу в указанную степень 
      * и возвращает новую матрицу.
      */
-    BlockMatrix pow(int exp) const;
+    BlockMatrix powBlockMatrix(int exp) const;
 };
 
 template<typename MatrixType>
@@ -770,7 +770,7 @@ bool BlockMatrix<MatrixType>::isSymmetric() const {
 }
 
 template <typename MatrixType>
-inline bool BlockMatrix<MatrixType>::isSquare() const { return rows_ == cols_; }
+inline bool BlockMatrix<MatrixType>::isSquareBlockMatrix() const { return rows_ == cols_; }
 
 template<typename MatrixType>
 double BlockMatrix<MatrixType>::frobeniusNorm() const {
@@ -914,15 +914,15 @@ MatrixType BlockMatrix<MatrixType>::dotProduct(const BlockMatrix<MatrixType>& ot
 }
 
 template <typename MatrixType>
-BlockMatrix<MatrixType> BlockMatrix<MatrixType>::pow(int exp) const {
-    if (!isSquare()) 
+BlockMatrix<MatrixType> BlockMatrix<MatrixType>::powBlockMatrix(int exp) const {
+    if (!isSquareBlockMatrix()) 
         throw std::invalid_argument("Matrix must be square to raise to a power.");
     
     BlockMatrix<MatrixType> result(*this); 
     BlockMatrix<MatrixType> base(*this);
 
     if (exp == 0) {
-        result = BlockMatrix<MatrixType>(getRows(), getCols(), getBlockRows(), getBlockCols());
+        result = BlockMatrix<MatrixType>(getRowsBlockMatrix(), getColsBlockMatrix(), getBlockRows(), getBlockCols());
         for (size_t i = 0; i < getBlockRows(); ++i) 
             result.getBlock(i, i) = Matrix<MatrixType>::makeIdentityMatrix(getBlockRows());
     } else {

@@ -3,73 +3,335 @@
 #include <iostream>
 #include <vector>
 #include <memory>
+#include <utility>
+#include <algorithm>
 
 namespace matrix_lib {
 
+/**
+ * @brief Класс для представления разреженной матрицы.
+ *
+ * Данный класс реализует разреженную матрицу с возможностью
+ * хранения ненулевых значений, их индексов и выполнения различных
+ * операций над матрицами, таких как сложение, вычитание, умножение,
+ * а также получение характеристик матрицы.
+ *
+ * @tparam T Тип элементов матрицы (например, int, double).
+ */
 template <typename T>
 class SparseMatrix {
-
 private:
-    std::vector<size_t> rowsIndexes;        // Индексы строк ненулевых элементов
-    std::vector<size_t> colsIndexes;        // Индексы столбцов ненулевых элементов
-    std::vector<T> values;        // Ненулевые значения
-    size_t rows_;               // Количество строк
-    size_t cols_;               // Количество столбцов
+    std::vector<size_t> rowsIndexes;  ///< Индексы строк ненулевых элементов
+    std::vector<size_t> colsIndexes;  ///< Индексы столбцов ненулевых элементов
+    std::vector<T> values;             ///< Ненулевые значения
+    size_t rows_;                      ///< Количество строк
+    size_t cols_;                      ///< Количество столбцов
 
 public:
-    SparseMatrix() : rows_(0), cols_(0) {};
-    SparseMatrix(size_t rows, size_t cols) : rows_(rows), cols_(cols) {};
+    /**
+     * @brief Конструктор по умолчанию. Создает пустую разреженную матрицу.
+     */
+    SparseMatrix() : rows_(0), cols_(0) {}
+
+    /**
+     * @brief Конструктор с параметрами. Создает разреженную матрицу заданного размера.
+     * @param rows Количество строк.
+     * @param cols Количество столбцов.
+     */
+    SparseMatrix(size_t rows, size_t cols) : rows_(rows), cols_(cols) {}
+
+    /**
+     * @brief Конструктор копирования.
+     * @param other Другой объект SparseMatrix для копирования.
+     */
     SparseMatrix(const SparseMatrix& other) = default;
-    SparseMatrix(const SparseMatrix&& other) noexcept = default;
+
+    /**
+     * @brief Конструктор перемещения.
+     * @param other Другой объект SparseMatrix для перемещения.
+     */
+    SparseMatrix(SparseMatrix&& other) noexcept = default;
+
+    /**
+     * @brief Деструктор. Освобождает ресурсы.
+     */
     ~SparseMatrix() = default;
 
-    size_t getRows() const { return rows_; }
-    size_t getCols() const { return cols_; }
+    /**
+     * @brief Получить количество строк матрицы.
+     * @return Количество строк.
+     */
+    size_t getRowsSparseMatrix() const { return rows_; }
 
+    /**
+     * @brief Получить количество столбцов матрицы.
+     * @return Количество столбцов.
+     */
+    size_t getColsSparseMatrix() const { return cols_; }
+
+    /**
+     * @brief Оператор присваивания копированием.
+     * @param other Другой объект SparseMatrix.
+     * @return Ссылка на текущий объект.
+     */
     SparseMatrix& operator=(const SparseMatrix& other);
+
+    /**
+     * @brief Оператор присваивания перемещением.
+     * @param other Другой объект SparseMatrix.
+     * @return Ссылка на текущий объект.
+     */
     SparseMatrix& operator=(SparseMatrix&& other) noexcept;
+
+    /**
+     * @brief Оператор сложения.
+     * @param other Другой объект SparseMatrix.
+     * @return Новый объект SparseMatrix, представляющий сумму.
+     */
     SparseMatrix operator+(const SparseMatrix& other) const;
+
+    /**
+     * @brief Оператор вычитания.
+     * @param other Другой объект SparseMatrix.
+     * @return Новый объект SparseMatrix, представляющий разность.
+     */
     SparseMatrix operator-(const SparseMatrix& other) const;
+
+    /**
+     * @brief Оператор умножения.
+     * @param other Другой объект SparseMatrix.
+     * @return Новый объект SparseMatrix, представляющий произведение.
+     */
     SparseMatrix operator*(const SparseMatrix& other) const;
+
+    /**
+     * @brief Оператор умножения на скаляр.
+     * @param scalar Скаляр.
+     * @return Новый объект SparseMatrix, представляющий произведение.
+     */
     SparseMatrix operator*(const T scalar) const;
+
+    /**
+     * @brief Оператор присваивания сложения.
+     * @param other Другой объект SparseMatrix.
+     * @return Ссылка на текущий объект.
+     */
     SparseMatrix& operator+=(const SparseMatrix& other);
+
+    /**
+     * @brief Оператор присваивания вычитания.
+     * @param other Другой объект SparseMatrix.
+     * @return Ссылка на текущий объект.
+     */
     SparseMatrix& operator-=(const SparseMatrix& other);
+
+    /**
+     * @brief Оператор присваивания умножения.
+     * @param other Другой объект SparseMatrix.
+     * @return Ссылка на текущий объект.
+     */
     SparseMatrix& operator*=(const SparseMatrix& other);
+
+    /**
+     * @brief Оператор присваивания умножения на скаляр.
+     * @param scalar Скаляр.
+     * @return Ссылка на текущий объект.
+     */
     SparseMatrix& operator*=(const T scalar);
+
+    /**
+     * @brief Оператор сравнения на равенство.
+     * @param other Другой объект SparseMatrix.
+     * @return true, если матрицы равны, иначе false.
+     */
     bool operator==(const SparseMatrix& other) const;
+
+    /**
+     * @brief Оператор сравнения на неравенство.
+     * @param other Другой объект SparseMatrix.
+     * @return true, если матрицы не равны, иначе false.
+     */
     bool operator!=(const SparseMatrix& other) const;
 
+    /**
+     * @brief Проверка, является ли матрица нулевой.
+     * @return true, если матрица нулевая, иначе false.
+     */
     bool isZeroSparseMatrix() const;
+
+    /**
+     * @brief Проверка, является ли матрица квадратной.
+     * @return true, если матрица квадратная, иначе false.
+     */
     bool isSquareSparseMatrix() const;
+
+    /**
+     * @brief Проверка, является ли матрица единичной.
+     * @return true, если матрица единичная, иначе false.
+     */
     bool isIdentitySparseMatrix() const;
+
+    /**
+     * @brief Проверка, является ли матрица диагональной.
+     * @return true, если матрица диагональная, иначе false.
+     */
     bool isDiagonalSparseMatrix() const;
+
+    /**
+     * @brief Проверка, является ли матрица пустой.
+     * @return true, если матрица пустая, иначе false.
+     */
     bool isEmptySparseMatrix() const;
 
-    void addValue(const size_t row, const size_t col, const T value);   // Добавить ненулевое значение
-    T getValue(const size_t row, const size_t col) const;         // Получить значение по индексу
-    void printSparseMatrix() const;                         // Вывести все ненулевые элементы
-    size_t getNonZeroCount() const;             // Получить количество ненулевых элементов
-    SparseMatrix<T> transpose() const;          // Транспонирование матрицы
-    void scaleSparseMatrix(T scalar);
-    void fillDiagonalSparseMatrix(T value);
-    size_t nonZeroCountInRow(int row) const;
-    size_t nonZeroCountInColumn(int col) const;
-    std::pair<size_t, size_t> sizeSparseMatrix() const;
-    double densitySparseMatrix() const;
-    void clearSparseMatrix();
-    T maxElementSparseMatrix() const;
-    T minElementSparseMatrix() const;
-    T sumRowSparseMatrix(int row) const;
-    T sumColumnSparseMatrix(int col) const;
-    T totalSumSparseMatrix() const;
-    T traceSparseMatrix() const;
-    SparseMatrix minorSparseMatrix(size_t row, size_t col) const;
-    T determinantSparseMatrix() const;
-    SparseMatrix cofactorSparseMatrix() const;
-    SparseMatrix adjugateSparseMatrix() const;
-    SparseMatrix inverseSparseMatrix() const;
+    /**
+     * @brief Добавить ненулевое значение в матрицу.
+     * @param row Индекс строки.
+     * @param col Индекс столбца.
+     * @param value Ненулевое значение для добавления.
+     */
+    void addValue(const size_t row, const size_t col, const T value);
 
-}; // class SparseMatrix
+    /**
+     * @brief Получить значение по индексу.
+     * @param row Индекс строки.
+     * @param col Индекс столбца.
+     * @return Значение в указанной позиции.
+     * @throw std::out_of_range Если индекс выходит за пределы матрицы.
+     */
+    T getValue(const size_t row, const size_t col) const;
+
+    /**
+     * @brief Вывести все ненулевые элементы матрицы.
+     */
+    void printSparseMatrix() const;
+
+    /**
+     * @brief Получить количество ненулевых элементов в матрице.
+     * @return Количество ненулевых элементов.
+     */
+    size_t getNonZeroCount() const;
+
+    /**
+     * @brief Транспонировать матрицу.
+     * @return Транспонированная матрица.
+     */
+    SparseMatrix<T> transposeSparseMatrix() const;
+
+    /**
+     * @brief Умножить матрицу на скаляр.
+     * @param scalar Скаляр для умножения.
+     */
+    void scaleSparseMatrix(T scalar);
+
+    /**
+     * @brief Заполнить главную диагональ матрицы заданным значением.
+     * @param value Значение для заполнения диагонали.
+     */
+    void fillDiagonalSparseMatrix(T value);
+
+    /**
+     * @brief Получить количество ненулевых элементов в строке.
+     * @param row Индекс строки.
+     * @return Количество ненулевых элементов в строке.
+     */
+    size_t nonZeroCountInRow(int row) const;
+
+    /**
+     * @brief Получить количество ненулевых элементов в столбце.
+     * @param col Индекс столбца.
+     * @return Количество ненулевых элементов в столбце.
+     */
+    size_t nonZeroCountInColumn(int col) const;
+
+    /**
+     * @brief Получить размеры матрицы.
+     * @return Пара, содержащая количество строк и столбцов.
+     */
+    std::pair<size_t, size_t> sizeSparseMatrix() const;
+
+    /**
+     * @brief Вычислить плотность разреженной матрицы.
+     * @return Плотность матрицы (отношение ненулевых элементов к общему количеству элементов).
+     */
+    double densitySparseMatrix() const;
+
+    /**
+     * @brief Очистить разреженную матрицу, удалив все элементы.
+     */
+    void clearSparseMatrix();
+
+    /**
+     * @brief Получить максимальный элемент разреженной матрицы.
+     * @return Максимальный элемент.
+     * @throw std::runtime_error Если матрица пуста.
+     */
+    T maxElementSparseMatrix() const;
+
+    /**
+     * @brief Получить минимальный элемент разреженной матрицы.
+     * @return Минимальный элемент.
+     * @throw std::runtime_error Если матрица пуста.
+     */
+    T minElementSparseMatrix() const;
+
+    /**
+     * @brief Вычислить сумму элементов указанной строки.
+     * @param row Индекс строки.
+     * @return Сумма элементов строки.
+     */
+    T sumRowSparseMatrix(int row) const;
+
+    /**
+     * @brief Вычислить сумму элементов указанного столбца.
+     * @param col Индекс столбца.
+     * @return Сумма элементов столбца.
+     */
+    T sumColumnSparseMatrix(int col) const;
+
+    /**
+     * @brief Получить общую сумму ненулевых значений.
+     * @return Общая сумма.
+     */
+    T totalSumSparseMatrix() const;
+
+    /**
+     * @brief Найти след разреженной матрицы.
+     * @return След матрицы.
+     */
+    T traceSparseMatrix() const;
+
+    /**
+     * @brief Получить минор матрицы по указанным индексам.
+     * @param row Индекс удаляемой строки.
+     * @param col Индекс удаляемого столбца.
+     * @return Минор разреженной матрицы.
+     */
+    SparseMatrix<T> minorSparseMatrix(size_t row, size_t col) const;
+
+    /**
+     * @brief Вычислить определитель разреженной матрицы.
+     * @return Определитель.
+     */
+    T determinantSparseMatrix() const;
+
+    /**
+     * @brief Получить матрицу кофакторов.
+     * @return Матрица кофакторов.
+     */
+    SparseMatrix<T> cofactorSparseMatrix() const;
+
+    /**
+     * @brief Получить аджугат разреженной матрицы.
+     * @return Аджугат разреженной матрицы.
+     */
+    SparseMatrix<T> adjugateSparseMatrix() const;
+
+    /**
+     * @brief Вычислить обратную матрицу.
+     * @return Обратная матрица.
+     */
+    SparseMatrix<T> inverseSparseMatrix() const;
+};
 
 template <typename T>
 SparseMatrix<T>& SparseMatrix<T>::operator=(const SparseMatrix& other) {
@@ -253,7 +515,7 @@ T SparseMatrix<T>::traceSparseMatrix() const {
 
 template <typename T>
 void SparseMatrix<T>::addValue(const size_t row, const size_t col, const T value) {
-    if (row >= rows_ || col >= columns_)
+    if (row >= rows_ || col >= cols_)
         throw std::out_of_range("Index out of range");
     
     if (value != static_cast<T>(0)) {
@@ -397,7 +659,7 @@ size_t SparseMatrix<T>::nonZeroCountInColumn(int col) const {
 
 
 template <typename T>
-SparseMatrix<T> SparseMatrix<T>::transpose() const {
+SparseMatrix<T> SparseMatrix<T>::transposeSparseMatrix() const {
     SparseMatrix result(cols_, rows_);
 
     result.rowsIndexes = colsIndexes;
@@ -435,7 +697,7 @@ T SparseMatrix<T>::determinantSparseMatrix() const {
     
     T det = static_cast<T>(0);
     for (size_t i = 0; i < cols_; ++i) {
-        T minorDet = minorSparseMatrix(0, i).determinant();
+        T minorDet = minorSparseMatrix(0, i).determinantSparseMatrix();
         det += ((i % 2 == 0) ? 1 : -1) * getValue(0, i) * minorDet;
     }
 
@@ -458,7 +720,7 @@ SparseMatrix<T> SparseMatrix<T>::cofactorSparseMatrix() const {
 }
 
 template <typename T>
-SparseMatrix<T> SparseMatrix<T>::adjugateSparseMatrix() const { return cofactorMatrix().transpose(); }
+SparseMatrix<T> SparseMatrix<T>::adjugateSparseMatrix() const { return cofactorSparseMatrix().transposeSparseMatrix(); }
 
 template <typename T>
 SparseMatrix<T> SparseMatrix<T>::inverseSparseMatrix() const {
@@ -481,6 +743,5 @@ SparseMatrix<T> SparseMatrix<T>::inverseSparseMatrix() const {
 
     return inverseMatrix;
 }
-
 
 } // namespace matrix_lib
