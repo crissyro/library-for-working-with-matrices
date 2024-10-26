@@ -50,6 +50,8 @@ public:
     size_t getNonZeroCount() const;             // Получить количество ненулевых элементов
     SparseMatrix<T> transpose() const;          // Транспонирование матрицы
     void scaleSparseMatrix(T scalar);
+    std::pair<size_t, size_t> sizeSparseMatrix() const;
+    double densitySparseMatrix() const;
     void clearSparseMatrix();
     T traceSparseMatrix() const;
     SparseMatrix minorSparseMatrix(size_t row, size_t col) const;
@@ -270,6 +272,12 @@ void SparseMatrix<T>::printSparseMatrix() const {
                   << rowsIndexes[i] << ", " << colsIndexes[i] << ")\n";
     }
 }
+
+template <typename T>
+inline std::pair<size_t, size_t> SparseMatrix<T>::sizeSparseMatrix() const { return { rows_, cols_ }; }
+
+template <typename T>
+double SparseMatrix<T>::densitySparseMatrix() const { return static_cast<double>(values.size()) / (rows_ * cols_); }
 
 template <typename T>
 inline size_t SparseMatrix<T>::getNonZeroCount() const { return values.size(); }
