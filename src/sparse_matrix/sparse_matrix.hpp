@@ -35,6 +35,7 @@ public:
     SparseMatrix& operator+=(const SparseMatrix& other);
     SparseMatrix& operator-=(const SparseMatrix& other);
     SparseMatrix& operator*=(const SparseMatrix& other);
+    SparseMatrix& operator*=(const T scalar);
     bool operator==(const SparseMatrix& other) const;
     bool operator!=(const SparseMatrix& other) const;
 
@@ -99,6 +100,12 @@ inline SparseMatrix<T>& SparseMatrix<T>::operator-=(const SparseMatrix& other) {
 template<typename T>
 inline SparseMatrix<T>& SparseMatrix<T>::operator*=(const SparseMatrix& other) {
     (*this) = (*this) * other;
+    return *this;
+}
+
+template<typename T>
+inline SparseMatrix<T>& SparseMatrix<T>::operator*=(const T scalar) {
+    (*this) = (*this) * scalar;
     return *this;
 }
 
