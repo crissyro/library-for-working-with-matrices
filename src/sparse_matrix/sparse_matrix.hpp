@@ -45,7 +45,7 @@ public:
 
     void addValue(const size_t row, const size_t col, const T value);   // Добавить ненулевое значение
     T getValue(const size_t row, const size_t col) const;         // Получить значение по индексу
-    void print() const;                         // Вывести все ненулевые элементы
+    void printSparseMatrix() const;                         // Вывести все ненулевые элементы
     size_t getNonZeroCount() const;             // Получить количество ненулевых элементов
     SparseMatrix<T> transpose() const;          // Транспонирование матрицы
 
@@ -81,6 +81,14 @@ T SparseMatrix<T>::getValue(const size_t row, const size_t col) const {
         if (rowsIndexes[i] == row && colsIndexes[i] == col) return values[i];
     
     return static_cast<T>(0);
+}
+
+template <typename T>
+void SparseMatrix<T>::printSparseMatrix() const {
+    for (size_t i = 0; i < values.size(); ++i) {
+        std::cout << "Value: " << values[i] << " at (" 
+                  << rowsIndexes[i] << ", " << colsIndexes[i] << ")\n";
+    }
 }
 
 template <typename T>
