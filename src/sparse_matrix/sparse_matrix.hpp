@@ -57,6 +57,8 @@ public:
     std::pair<size_t, size_t> sizeSparseMatrix() const;
     double densitySparseMatrix() const;
     void clearSparseMatrix();
+    T maxElementSparseMatrix() const;
+    T minElementSparseMatrix() const;
     T traceSparseMatrix() const;
     SparseMatrix minorSparseMatrix(size_t row, size_t col) const;
     T determinantSparseMatrix() const;
@@ -319,6 +321,19 @@ bool SparseMatrix<T>::isDiagonalSparseMatrix() const {
 
     return true;
 }
+
+template <typename T>
+T SparseMatrix<T>::maxElementSparseMatrix() const {
+    if (values.empty()) throw std::runtime_error("Matrix is empty");
+    return *std::max_element(values.begin(), values.end());
+}
+
+template <typename T>
+T SparseMatrix<T>::minElementSparseMatrix() const {
+    if (values.empty()) throw std::runtime_error("Matrix is empty");
+    return *std::min_element(values.begin(), values.end());
+}
+
 
 template <typename T>
 void SparseMatrix<T>::fillDiagonalSparseMatrix(T value) {
