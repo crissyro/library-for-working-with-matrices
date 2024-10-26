@@ -252,11 +252,21 @@ bool SparseMatrix<T>::isIdentitySparseMatrix() const {
     if (!isSquareSparseMatrix()) return false;
 
     for (size_t i = 0; i < values.size(); i++) {
+        if (rowsIndexes[i] == colsIndexes[i]) {
+            if (values[i] != static_cast<T>(1)) return false;
+        } else {
+            if (values[i] != static_cast<T>(0)) return false;
+        }
+    }
 
-        if (rowsIndexes[i] == colsIndexes[i]) if(values[i] != static_cast<T>(1)) return false;
+    return true;
+}
 
-        else if(values[i] != static_cast<T>(0)) return false;
-        
+template<typename T>
+bool SparseMatrix<T>::isDiagonalSparseMatrix() const {
+    for (size_t i = 0; i < values.size(); i++) {
+        if (rowsIndexes[i] != colsIndexes[i]) 
+            if (values[i] != static_cast<T>(0)) return false;
     }
 
     return true;
