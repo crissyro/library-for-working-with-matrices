@@ -247,6 +247,21 @@ inline bool SparseMatrix<T>::isZeroSparseMatrix() const { return values.empty();
 template <typename T>
 inline bool SparseMatrix<T>::isSquareSparseMatrix() const { return rows_ == cols_; }
 
+template<typename T>
+bool SparseMatrix<T>::isIdentitySparseMatrix() const {
+    if (!isSquareSparseMatrix()) return false;
+
+    for (size_t i = 0; i < values.size(); i++) {
+
+        if (rowsIndexes[i] == colsIndexes[i]) if(values[i] != static_cast<T>(1)) return false;
+
+        else if(values[i] != static_cast<T>(0)) return false;
+        
+    }
+
+    return true;
+}
+
 template <typename T>
 SparseMatrix<T> SparseMatrix<T>::transpose() const {
     SparseMatrix result(cols_, rows_);
