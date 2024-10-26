@@ -50,7 +50,8 @@ public:
     size_t getNonZeroCount() const;             // Получить количество ненулевых элементов
     SparseMatrix<T> transpose() const;          // Транспонирование матрицы
     void scaleSparseMatrix(T scalar);
-    void clearSparseMatrix()
+    void clearSparseMatrix();
+    T traceSparseMatrix() const;
 
 }; // class SparseMatrix
 
@@ -219,6 +220,19 @@ void SparseMatrix<T>::clearSparseMatrix() {
     rowsIndexes.clear();
     colsIndexes.clear();
     values.clear();
+}
+
+template <typename T>
+T SparseMatrix<T>::traceSparseMatrix() const {
+    if (rows_ != cols_) 
+        throw std::invalid_argument("Matrix must be square");
+    
+
+    T traceValue = static_cast<T>(0);
+    for (size_t i = 0; i < values.size(); ++i) 
+        if (rowsIndexes[i] == colsIndexes[i]) traceValue += values[i];  
+    
+    return traceValue;
 }
 
 template <typename T>
