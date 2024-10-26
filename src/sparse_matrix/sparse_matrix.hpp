@@ -49,7 +49,8 @@ public:
     void printSparseMatrix() const;                         // Вывести все ненулевые элементы
     size_t getNonZeroCount() const;             // Получить количество ненулевых элементов
     SparseMatrix<T> transpose() const;          // Транспонирование матрицы
-    void scale(T scalar);
+    void scaleSparseMatrix(T scalar);
+    void clearSparseMatrix()
 
 }; // class SparseMatrix
 
@@ -209,8 +210,15 @@ inline SparseMatrix<T> SparseMatrix<T>::operator*(const T scalar) const {
 }
 
 template <typename T>
-inline void SparseMatrix<T>::scale(T scalar) {
+inline void SparseMatrix<T>::scaleSparseMatrix(T scalar) {
     for (auto& value : values) value *= scalar;
+}
+
+template <typename T>
+void SparseMatrix<T>::clearSparseMatrix() {
+    rowsIndexes.clear();
+    colsIndexes.clear();
+    values.clear();
 }
 
 template <typename T>
