@@ -54,6 +54,9 @@ public:
     T traceSparseMatrix() const;
     SparseMatrix minorSparseMatrix(size_t row, size_t col) const;
     T determinantSparseMatrix() const;
+    SparseMatrix cofactorSparseMatrix() const;
+    SparseMatrix adjugateSparseMatrix() const;
+    SparseMatrix inverseSparseMatrix() const;
 
 }; // class SparseMatrix
 
@@ -347,5 +350,46 @@ T SparseMatrix<T>::determinantSparseMatrix() const {
 
     return det;
 }
+
+template <typename T>
+SparseMatrix<T> SparseMatrix<T>::cofactorSparseMatrix() const {
+    SparseMatrix<T> cofactorMat(rows_, cols_);
+
+    for (size_t i = 0; i < rows_; ++i) {
+        for (size_t j = 0; j < cols_; ++j) {
+            T minorDet = minorSparseMatrix(i, j).determinantSparseMatrix();
+            T sign = ((i + j) % 2 == 0) ? 1 : -1;
+            cofactorMat.addValue(i, j, sign * minorDet);
+        }
+    }
+
+    return cofactorMat;
+}
+
+template <typename T>
+SparseMatrix<T> SparseMatrix<T>::adjugateSparseMatrix() const { return cofactorMatrix().transpose(); }
+
+template <typename T>
+SparseMatrix<T> SparseMatrix<T>::inverseSparseMatrix() const {
+    T det = determinantSparseMatrix();
+
+    if (det == static_cast<T>(0)) 
+        throw std::runtime_error("Matrix is singular and cannot be inverted.");
+    
+
+    SparseMatrix<T> adjugateMatrix = adjugateSparseMatrix();
+    SparseMatrix<T> inverseMatrix(rows_, cols_);
+
+    for (size_t i = 0; i < adjugateMatrix.values.size(); ++i) {
+        inverseMatrix.addValue(
+            adjugateMatrix.rowsIndexes[i],
+            adjugateMatrix.colsIndexes[i],
+            adjugateMatrix.values[i] / det
+        );
+    }
+
+    return inverseMatrix;
+}
+
 
 } // namespace matrix_lib
