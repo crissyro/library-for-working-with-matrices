@@ -52,6 +52,8 @@ public:
     void scaleSparseMatrix(T scalar);
     void clearSparseMatrix();
     T traceSparseMatrix() const;
+    SparseMatrix minorSparseMatrix(size_t row, size_t col) const;
+    T determinantSparseMatrix() const;
 
 }; // class SparseMatrix
 
@@ -309,6 +311,41 @@ SparseMatrix<T> SparseMatrix<T>::transpose() const {
     result.values = values;
 
     return result;
+}
+
+template <typename T>
+SparseMatrix<T> SparseMatrix<T>::minorSparseMatrix(size_t row, size_t col) const {
+    SparseMatrix<T> minorMatrix(rows_ - 1, cols_ - 1);
+
+    for (size_t i = 0; i < values.size(); ++i) {
+        if (rowsIndexes[i] == row || colsIndexes[i] == col) continue;
+
+        size_t newRow = (rowsIndexes[i] < row) ? rowsIndexes[i] : rowsIndexes[i] - 1;
+        size_t newCol = (colsIndexes[i] < col) ? colsIndexes[i] : colsIndexes[i] - 1;
+
+        minorMatrix.addValue(newRow, newCol, values[i]);
+    }
+
+    return minorMatrix;
+}
+
+template <typename T>
+T SparseMatrix<T>::determinantSparseMatrix() const {
+    if (!isSquareSparseMatrix()) 
+        throw std::invalid_argument("Matrix must be square");
+    
+
+    if (rows_ == 1) return getValue(0, 0); 
+
+    if (rows_ == 2) return getValue(0, 0) * getValue(1, 1) - getValue(0, 1) * getValue(1, 0);
+    
+    T det = static_cast<T>(0);
+    for (size_t i = 0; i < cols_; ++i) {
+        T minorDet = minorSparseMatrix(0, i).determinant();
+        det += ((i % 2 == 0) ? 1 : -1) * getValue(0, i) * minorDet;
+    }
+
+    return det;
 }
 
 } // namespace matrix_lib
