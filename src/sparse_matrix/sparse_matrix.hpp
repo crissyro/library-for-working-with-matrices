@@ -52,8 +52,30 @@ public:
 }; // class SparseMatrix
 
 template <typename T>
-inline size_t SparseMatrix<T>::getNonZeroCount() const { return values.size(); }
+SparseMatrix<T>& SparseMatrix<T>::operator=(const SparseMatrix& other) {
+    if (this != &other) {
+        rows_ = other.rows_;
+        cols_ = other.cols_;
+        rowsIndexes = other.rowsIndexes;
+        colsIndexes = other.colsIndexes;
+        values = other.values;
+    }
 
+    return *this;
+}
+
+template <typename T>
+SparseMatrix<T>& SparseMatrix<T>::operator=(SparseMatrix&& other) noexcept {
+    if (this != &other) {
+        rows_ = std::exchange(other.rows_, 0);
+        cols_ = std::exchange(other.cols_, 0);
+        rowsIndexes = std::move(other.rowsIndexes);
+        colsIndexes = std::move(other.colsIndexes);
+        values = std::move(other.values);
+    }
+    
+    return *this;
+}
 
 template <typename T>
 SparseMatrix<T> SparseMatrix<T>::operator+(const SparseMatrix& other) const {
@@ -180,6 +202,9 @@ void SparseMatrix<T>::printSparseMatrix() const {
                   << rowsIndexes[i] << ", " << colsIndexes[i] << ")\n";
     }
 }
+
+template <typename T>
+inline size_t SparseMatrix<T>::getNonZeroCount() const { return values.size(); }
 
 template <typename T>
 inline bool SparseMatrix<T>::isZeroSparseMatrix() const { return values.empty(); }
