@@ -52,61 +52,8 @@ public:
 }; // class SparseMatrix
 
 template <typename T>
-inline SparseMatrix<T> SparseMatrix<T>::operator*(const T scalar) const {
-    SparseMatrix result(*this);
+inline size_t SparseMatrix<T>::getNonZeroCount() const { return values.size(); }
 
-    for (T& element : result.values) element *= scalar;
-    
-    return result;
-}
-
-template <typename T>
-void SparseMatrix<T>::addValue(const size_t row, const size_t col, const T value) {
-    if (row >= rows_ || col >= columns_)
-        throw std::out_of_range("Index out of range");
-    
-    if (value != static_cast<T>(0)) {
-        rowsIndexes.push_back(row);
-        colsIndexes.push_back(col);
-        values.push_back(value);
-    }
-}
-
-template<typename T>
-T SparseMatrix<T>::getValue(const size_t row, const size_t col) const {
-    if (row >= rows_ || col >= cols_)
-        throw std::out_of_range("Index out of range");
-
-    for (size_t i = 0; i < values.size(); ++i) 
-        if (rowsIndexes[i] == row && colsIndexes[i] == col) return values[i];
-    
-    return static_cast<T>(0);
-}
-
-template <typename T>
-void SparseMatrix<T>::printSparseMatrix() const {
-    for (size_t i = 0; i < values.size(); ++i) {
-        std::cout << "Value: " << values[i] << " at (" 
-                  << rowsIndexes[i] << ", " << colsIndexes[i] << ")\n";
-    }
-}
-
-template <typename T>
-inline bool SparseMatrix<T>::isZeroSparseMatrix() const { return values.empty(); }
-
-template <typename T>
-inline bool SparseMatrix<T>::isSquareSparseMatrix() const { return rows_ == cols_; }
-
-template <typename T>
-SparseMatrix<T> SparseMatrix<T>::transpose() const {
-    SparseMatrix result(cols_, rows_);
-
-    result.rowsIndexes = colsIndexes;
-    result.colsIndexes = rowsIndexes;
-    result.values = values;
-
-    return result;
-}
 
 template <typename T>
 SparseMatrix<T> SparseMatrix<T>::operator+(const SparseMatrix& other) const {
@@ -190,7 +137,64 @@ SparseMatrix<T> SparseMatrix<T>::operator*(const SparseMatrix& other) const {
             }
         }
     }
+
+    return result;
+}
+
+template <typename T>
+inline SparseMatrix<T> SparseMatrix<T>::operator*(const T scalar) const {
+    SparseMatrix result(*this);
+
+    for (T& element : result.values) element *= scalar;
     
+    return result;
+}
+
+template <typename T>
+void SparseMatrix<T>::addValue(const size_t row, const size_t col, const T value) {
+    if (row >= rows_ || col >= columns_)
+        throw std::out_of_range("Index out of range");
+    
+    if (value != static_cast<T>(0)) {
+        rowsIndexes.push_back(row);
+        colsIndexes.push_back(col);
+        values.push_back(value);
+    }
+}
+
+template<typename T>
+T SparseMatrix<T>::getValue(const size_t row, const size_t col) const {
+    if (row >= rows_ || col >= cols_)
+        throw std::out_of_range("Index out of range");
+
+    for (size_t i = 0; i < values.size(); ++i) 
+        if (rowsIndexes[i] == row && colsIndexes[i] == col) return values[i];
+    
+    return static_cast<T>(0);
+}
+
+template <typename T>
+void SparseMatrix<T>::printSparseMatrix() const {
+    for (size_t i = 0; i < values.size(); ++i) {
+        std::cout << "Value: " << values[i] << " at (" 
+                  << rowsIndexes[i] << ", " << colsIndexes[i] << ")\n";
+    }
+}
+
+template <typename T>
+inline bool SparseMatrix<T>::isZeroSparseMatrix() const { return values.empty(); }
+
+template <typename T>
+inline bool SparseMatrix<T>::isSquareSparseMatrix() const { return rows_ == cols_; }
+
+template <typename T>
+SparseMatrix<T> SparseMatrix<T>::transpose() const {
+    SparseMatrix result(cols_, rows_);
+
+    result.rowsIndexes = colsIndexes;
+    result.colsIndexes = rowsIndexes;
+    result.values = values;
+
     return result;
 }
 
