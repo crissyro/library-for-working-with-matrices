@@ -73,9 +73,19 @@ SparseMatrix<T>& SparseMatrix<T>::operator=(SparseMatrix&& other) noexcept {
         colsIndexes = std::move(other.colsIndexes);
         values = std::move(other.values);
     }
-    
+
     return *this;
 }
+
+template <typename T>
+bool SparseMatrix<T>::operator==(const SparseMatrix& other) const {
+    return (rows_ == other.rows_ && cols_ == other.cols_ &&
+            rowsIndexes == other.rowsIndexes && colsIndexes == other.colsIndexes &&
+            values == other.values);
+}
+
+template <typename T>
+bool SparseMatrix<T>::operator!=(const SparseMatrix& other) const { return !(*this == other); }
 
 template <typename T>
 SparseMatrix<T> SparseMatrix<T>::operator+(const SparseMatrix& other) const {
