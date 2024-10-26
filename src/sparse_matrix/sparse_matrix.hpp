@@ -52,6 +52,8 @@ public:
     SparseMatrix<T> transpose() const;          // Транспонирование матрицы
     void scaleSparseMatrix(T scalar);
     void fillDiagonalSparseMatrix(T value);
+    size_t nonZeroCountInRow(int row) const;
+    size_t nonZeroCountInColumn(int col) const;
     std::pair<size_t, size_t> sizeSparseMatrix() const;
     double densitySparseMatrix() const;
     void clearSparseMatrix();
@@ -325,6 +327,28 @@ void SparseMatrix<T>::fillDiagonalSparseMatrix(T value) {
 
     for (size_t i = 0; i < minDim; ++i) addValue(i, i, value);
 }
+
+template <typename T>
+size_t SparseMatrix<T>::nonZeroCountInRow(int row) const {
+    size_t count = 0;
+
+    for (size_t i = 0; i < rowsIndexes.size(); ++i) 
+        if (rowsIndexes[i] == row) ++count;
+        
+    return count;
+}
+
+template <typename T>
+size_t SparseMatrix<T>::nonZeroCountInColumn(int col) const {
+    size_t count = 0;
+
+    for (size_t i = 0; i < colsIndexes.size(); ++i) 
+        if (colsIndexes[i] == col) ++count;
+    
+
+    return count;
+}
+
 
 template <typename T>
 SparseMatrix<T> SparseMatrix<T>::transpose() const {
