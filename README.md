@@ -4,7 +4,7 @@ Coursework on programming basics in C++ at BSTU named after V.G. Shukhov
 
 ## Matrix Library
 
-This project is a C++ library for working with various types of matrices, including dense, sparse, and block matrices. The library provides a wide range of functionalities for matrix operations, manipulation, and analysis. It aims to facilitate efficient handling of matrix data structures, especially in applications where sparsity is a significant factor.
+This project is a C++ library for working with various types of matrices, sparse, and block matrices. The library provides a wide range of functionalities for matrix operations, manipulation, and analysis. It aims to facilitate efficient handling of matrix data structures, especially in applications where sparsity is a significant factor.
 
 ### Features
 
