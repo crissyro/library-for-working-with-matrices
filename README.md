@@ -81,11 +81,18 @@ Here is a simple example of how to create a dense matrix and perform some operat
 #include "matrix/matrix.hpp"
 
 int main() {
-    matrix_lib::Matrix<int> denseMatrix(3, 3); // Create a 3x3 dense matrix
-    denseMatrix.setValue(0, 0, 1);
-    denseMatrix.setValue(1, 1, 2);
-    denseMatrix.setValue(2, 2, 3);
-    denseMatrix.print(); // Print the matrix
+    int arr5[5][5] = {
+        {1, 2, 3, 4, 5},
+        {5, 4, 3, 2, 1},
+        {1, 3, 5, 2, 4},
+        {4, 5, 2, 1, 3},
+        {2, 1, 4, 5, 3}
+    };
+
+    Matrix<int> mat(arr5);
+
+    mat.printMatrix();
+    
     return 0;
 }
 ```
