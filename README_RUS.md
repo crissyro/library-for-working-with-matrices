@@ -78,11 +78,18 @@
 #include "matrix/matrix.hpp"
 
 int main() {
-    matrix_lib::Matrix<int> denseMatrix(3, 3); // Создаем плотную матрицу 3x3
-    denseMatrix.setValue(0, 0, 1);
-    denseMatrix.setValue(1, 1, 2);
-    denseMatrix.setValue(2, 2, 3);
-    denseMatrix.print(); // Печатаем матрицу
+    int arr5[5][5] = {
+        {1, 2, 3, 4, 5},
+        {5, 4, 3, 2, 1},
+        {1, 3, 5, 2, 4},
+        {4, 5, 2, 1, 3},
+        {2, 1, 4, 5, 3}
+    };
+
+    Matrix<int> mat(arr5);
+
+    mat.printMatrix();
+    
     return 0;
 }
 ```
