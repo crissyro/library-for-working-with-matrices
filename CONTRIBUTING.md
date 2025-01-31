@@ -1,37 +1,34 @@
-# 🤝 Contributing to TO-DO Telegram Bot
 
-Thank you for considering contributing to this project! We welcome all contributions, big or small.
+# Contributing to Matrix Library
+
+Thank you for considering contributing to this project! Follow these steps to make contributions:
 
 ## How to Contribute
 
-1. **Fork the Repository**: Click the 'Fork' button at the top right of the repository page.
-2. **Clone Your Fork**:  
-   ```sh
-   git clone https://github.com/your-username/TO-DO-telegram-bot.git
-   cd TO-DO-telegram-bot
+1. **Fork the Repository**: Click on the fork button on the top right corner to create a personal copy of the repository.
+2. **Clone the Repository**: Clone your forked repository to your local machine.
+   ```bash
+   git clone https://github.com/your-username/library-for-working-with-matrices.git
    ```
-3. **Create a New Branch**:  
-   ```sh
-   git checkout -b feature-name
+3. **Create a New Branch**: Make a branch specific to the feature or fix you want to contribute.
+   ```bash
+   git checkout -b feature/your-feature
    ```
-4. **Make Your Changes** and commit them:  
-   ```sh
-   git commit -m "Add a meaningful commit message"
+4. **Make Changes**: Implement your changes, commit them with clear commit messages, and push them to your branch.
+   ```bash
+   git add .
+   git commit -m "Add your message here"
+   git push origin feature/your-feature
    ```
-5. **Push Your Changes**:  
-   ```sh
-   git push origin feature-name
-   ```
-6. **Create a Pull Request**: Go to the original repository, click on 'Pull Requests', and submit your PR.
+5. **Create a Pull Request**: Go to the repository on GitHub and open a pull request. Describe your changes in detail.
 
-## Code Style
+## Code Style and Formatting
 
-- Follow PEP8 guidelines for Python code.
-- Write meaningful commit messages.
-- Keep changes focused on a single issue.
+Ensure all code follows the coding style and passes checks:
+- **Use `clang-format`** for formatting C++ code.
+- **Add tests** for new features or fixes.
+- **Run tests** to verify that everything works as expected.
 
 ## Reporting Issues
 
-If you find any bugs or have feature requests, please open an issue [here](https://github.com/crissyro/TO-DO-telegram-bot/issues).
-
-Thank you for contributing! 🚀
+If you find bugs or have ideas for improvements, feel free to [open an issue](https://github.com/crissyro/library-for-working-with-matrices/issues).
